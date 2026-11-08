@@ -65,7 +65,7 @@ An app with several merchants passes credentials per call instead: see [Several 
 ## Amounts, currencies and dates
 
 - **Amounts are integers in minor units**, everywhere, both ways: `12_500` is 125.00 GEL. The package never hands you
-  a float. Where Flitt answers in major units (`capture_amount`, the transaction list), it converts exactly.
+  a float. Where Flitt answers in major units (`additionalInfo`'s `capture_amount` and fees), it converts exactly.
 - **Currencies** are `ClassAtlas\Flitt\Enums\Currency`: `GEL`, `USD`, `EUR`, `AMD`, `AZN`, `KZT`, `MDL`, `UZS`, `GBP`,
   `CZK`. All have two decimals. Which ones your merchant may use is Flitt's decision. Only GEL payments have been tried
   on the test merchant.
@@ -327,6 +327,9 @@ Flitt answers errors with HTTP 200 and an `error_code`; the package turns every 
 Off by default. With `FLITT_LOG_REQUESTS=true`, each call logs one line: the operation, merchant id, order id, HTTP
 status, Flitt's error code and the time taken. It never logs bodies, keys, signatures, card tokens, card numbers, emails
 or IP addresses.
+
+A rejected callback or browser return is always logged, as a warning with the reason, the merchant id and the order id
+only, to `FLITT_LOG_CHANNEL` when it is set.
 
 ## Testing your app
 
