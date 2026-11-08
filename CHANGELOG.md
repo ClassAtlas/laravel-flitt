@@ -5,6 +5,11 @@ All notable changes to `class-atlas/laravel-flitt` are listed here. The format f
 
 ## [Unreleased]
 
+## [1.0.0-beta.1] - 2026-11-08
+
+The first beta: what an app needs to take card payments through Flitt's hosted checkout, charge saved cards, and
+handle callbacks. Capture, reverse, the transaction list and payouts follow in later betas.
+
 ### Added
 
 - `config/flitt.php` with the merchant's id and keys, timeouts and logging, published with the `flitt-config` tag.
@@ -38,3 +43,6 @@ All notable changes to `class-atlas/laravel-flitt` are listed here. The format f
 - The Saloon requests `CheckoutUrlRequest`, `CheckoutTokenRequest`, `OrderStatusRequest` and `RecurringRequest`.
 - The enums `OrderStatus`, `TranType`, `CaptureStatus`, `ReverseStatus`, `Currency`, `Lang`, `PaymentSystem` and
   `PaymentMethod`. A value this version does not know reads as `null` and never breaks parsing.
+
+[Unreleased]: https://github.com/ClassAtlas/laravel-flitt/compare/v1.0.0-beta.1...HEAD
+[1.0.0-beta.1]: https://github.com/ClassAtlas/laravel-flitt/releases/tag/v1.0.0-beta.1

@@ -6,14 +6,16 @@
 [![License](https://img.shields.io/packagist/l/class-atlas/laravel-flitt.svg)](LICENSE)
 
 A Laravel client for the [Flitt](https://flitt.com) payment gateway (formerly Fondy): hosted checkout, order status,
-capture, reverse, recurring charges, card and IBAN payouts, and signed callbacks. It speaks Flitt's own words, so every
+recurring charges, and signed callbacks and browser returns. It speaks Flitt's own words, so every
 name here can be looked up in [Flitt's documentation](https://docs.flitt.com).
 
 - Every request is signed and every signed answer is checked.
 - Credentials can change per call, for apps that hold several merchants.
 - `Flitt::fake()` lets your tests run without the network, including correctly signed callbacks.
 
-> **Not released yet.** The first beta is `1.0.0-beta.1`. This README covers what is built so far.
+> **Beta.** `1.0.0-beta.1` holds hosted checkout, order status, recurring charges, callbacks and browser returns, and
+> the fake. Capture, reverse, the transaction list and payouts follow in later betas. Until 1.0.0, public names may
+> still change between betas; the changelog says when they do.
 
 ## Supported versions
 
@@ -27,7 +29,7 @@ when versions are added and dropped.
 ## Installation
 
 ```bash
-composer require class-atlas/laravel-flitt
+composer require class-atlas/laravel-flitt:^1.0@beta
 ```
 
 Publish the config file if you want to change its defaults:
@@ -415,6 +417,25 @@ The package follows [Semantic Versioning](https://semver.org):
 
 Everything this README shows is public. Classes marked `@internal` are not, and may change in any release. Public
 classes are `final`; only the package creates response objects.
+
+## Not covered
+
+| What                                                 | Status      | Why                                                                                    |
+|------------------------------------------------------|-------------|----------------------------------------------------------------------------------------|
+| Capture and reverse                                  | Before 1.0.0 | Built and tested on the test merchant next; in a later beta                            |
+| Transaction list                                     | Before 1.0.0 | In a later beta                                                                        |
+| Card and IBAN payouts                                | Before 1.0.0 | In a later beta                                                                        |
+| Subscriptions (scheduled payments)                   | Planned     | Flitt's scheduled-payment callback has not been seen on the test merchant yet          |
+| Reports                                              | Planned     | The test merchant's reports are empty, so a report row has never been seen             |
+| Split settlement                                     | Planned     | A settlement never completed on the test merchant                                      |
+| Chargeback callback                                  | Planned     | A chargeback cannot be raised on the test merchant                                     |
+| Apple Pay and Google Pay tokens (encrypted)          | Planned     | Needs Apple or Google certificates registered with Flitt                               |
+| A saved card on the hosted page (`rectoken` on a checkout) | Not offered | Flitt's page ignores the token, always asks 3-D Secure, and echoes the token even when another card paid. Use a [recurring charge](#recurring-charges) |
+| Checkout redirect (`/api/checkout/redirect`)         | Not planned | It opens the same page as a checkout URL                                               |
+| Fiscal data                                          | Not planned | For merchants in Uzbekistan only                                                       |
+| Payments with a card number, a card's CVV (`cvv2` on a recurring charge), or a decrypted wallet card | Never | They put your servers in PCI DSS scope |
+
+Open an issue if you need a planned item sooner.
 
 ## Security
 
