@@ -6,18 +6,10 @@ use ClassAtlas\Flitt\ConfigCredentialsResolver;
 use ClassAtlas\Flitt\Credentials;
 use ClassAtlas\Flitt\Facades\Flitt;
 use ClassAtlas\Flitt\Flitt as FlittClient;
-
-function configureMerchant(mixed $merchantId = '1549901', mixed $paymentKey = 'test', mixed $creditKey = 'testcredit'): void
-{
-    config([
-        'flitt.merchant_id' => $merchantId,
-        'flitt.payment_key' => $paymentKey,
-        'flitt.credit_key' => $creditKey,
-    ]);
-}
+use ClassAtlas\Flitt\Tests\Support\TestCredentials;
 
 it('knows the configured merchant', function () {
-    configureMerchant();
+    TestCredentials::configure();
 
     expect(app(ConfigCredentialsResolver::class)->forMerchant(1549901))
         ->merchantId->toBe(1549901)
@@ -26,13 +18,13 @@ it('knows the configured merchant', function () {
 });
 
 it('knows no other merchant', function () {
-    configureMerchant();
+    TestCredentials::configure();
 
     expect(app(ConfigCredentialsResolver::class)->forMerchant(1396424))->toBeNull();
 });
 
 it('treats an incomplete or invalid config as no merchant', function (mixed $merchantId, mixed $paymentKey) {
-    configureMerchant($merchantId, $paymentKey);
+    TestCredentials::configure($merchantId, $paymentKey);
 
     expect(app(ConfigCredentialsResolver::class)->configured())->toBeNull();
 })->with([
@@ -44,13 +36,13 @@ it('treats an incomplete or invalid config as no merchant', function (mixed $mer
 ]);
 
 it('leaves the credit key out when it is not set', function (mixed $creditKey) {
-    configureMerchant(creditKey: $creditKey);
+    TestCredentials::configure(creditKey: $creditKey);
 
     expect(app(ConfigCredentialsResolver::class)->configured()?->creditKey())->toBeNull();
 })->with([null, '']);
 
 it('uses the configured merchant for calls without credentials of their own', function () {
-    configureMerchant();
+    TestCredentials::configure();
 
     expect(app(FlittClient::class)->credentials())
         ->merchantId->toBe(1549901)
@@ -58,7 +50,7 @@ it('uses the configured merchant for calls without credentials of their own', fu
 });
 
 it('uses per-call credentials on the client they were given to, and only there', function () {
-    configureMerchant();
+    TestCredentials::configure();
     $school = new Credentials(1396424, 'school-payment-key');
 
     $client = Flitt::withCredentials($school);

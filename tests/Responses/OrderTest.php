@@ -13,31 +13,6 @@ use ClassAtlas\Flitt\Responses\Order;
 use ClassAtlas\Flitt\Tests\Support\Samples;
 use Illuminate\Support\Str;
 
-/**
- * Flitt fields the Order leaves in $raw only: the signature, Flitt's debugging string, and legacy or per-operation
- * fields that are not part of the order.
- */
-const RAW_ONLY_ORDER_FIELDS = ['signature', 'response_signature_string', 'fee_oplata', 'additional_info'];
-
-/**
- * additional_info keys AdditionalInfo leaves in $raw only.
- */
-const RAW_ONLY_ADDITIONAL_INFO = ['recurring_data'];
-
-/**
- * @return array<string, mixed>
- */
-function firstSample(Closure $matches): array
-{
-    foreach (Samples::dataset() as [$sample]) {
-        if ($matches($sample)) {
-            return $sample;
-        }
-    }
-
-    throw new RuntimeException('No sample matches.');
-}
-
 it('reads every recorded callback and return into a fully typed order', function (array $sample) {
     $fields = Samples::fields($sample);
     $order = Order::fromFields($fields);
@@ -50,7 +25,7 @@ it('reads every recorded callback and return into a fully typed order', function
         ->and($order->orderStatus?->value)->toBe($sample['order_status'])
         ->and($order->raw)->toBe($fields);
 
-    foreach (array_diff_key($fields, array_flip(RAW_ONLY_ORDER_FIELDS)) as $field => $value) {
+    foreach (array_diff_key($fields, array_flip(Samples::RAW_ONLY_ORDER_FIELDS)) as $field => $value) {
         $property = Str::camel($field);
 
         expect(property_exists($order, $property))->toBeTrue("Order has no property for {$field}.");
@@ -60,7 +35,7 @@ it('reads every recorded callback and return into a fully typed order', function
         }
     }
 
-    foreach (array_diff_key($order->additionalInfo->raw, array_flip(RAW_ONLY_ADDITIONAL_INFO)) as $key => $value) {
+    foreach (array_diff_key($order->additionalInfo->raw, array_flip(Samples::RAW_ONLY_ADDITIONAL_INFO)) as $key => $value) {
         $property = Str::camel($key);
 
         expect(property_exists($order->additionalInfo, $property))->toBeTrue("AdditionalInfo has no property for {$key}.");
@@ -76,7 +51,7 @@ it('reads all 59 recorded samples', function () {
 });
 
 it('reads an approved card payment field by field', function () {
-    $sample = firstSample(static fn (array $s): bool => $s['channel'] === 'server_callback_url'
+    $sample = Samples::first(static fn (array $s): bool => $s['channel'] === 'server_callback_url'
         && $s['order_status'] === 'approved'
         && str_contains($s['body'], '"payment_system": "card"'));
 
@@ -97,7 +72,7 @@ it('reads an approved card payment field by field', function () {
 });
 
 it('reads a payer\'s IBAN and name from an open-banking payment', function () {
-    $sample = firstSample(static fn (array $s): bool => $s['encoding'] === 'json' && str_contains($s['body'], 'payer_iban'));
+    $sample = Samples::first(static fn (array $s): bool => $s['encoding'] === 'json' && str_contains($s['body'], 'payer_iban'));
 
     $order = Order::fromFields(Samples::fields($sample));
 
@@ -147,6 +122,9 @@ it('reads ids and codes as integers, however Flitt sends them', function (mixed 
     'empty' => ['', null],
     'missing' => [null, null],
     'not a number' => ['12ab', null],
+    'leading zeros' => ['00042', 42],
+    'nineteen digits' => ['9223372036854775807', PHP_INT_MAX],
+    'past PHP_INT_MAX' => ['9223372036854775808', null],
 ]);
 
 it('reads minor-unit amounts, whether text or numbers', function () {
@@ -204,6 +182,11 @@ it('reads Flitt\'s local times as Europe/Kyiv time, summer and winter', function
     'winter, UTC+2' => ['08.11.2026 14:08:28', '2026-11-08 12:08:28'],
     'summer, UTC+3' => ['15.07.2026 14:08:28', '2026-07-15 11:08:28'],
 ]);
+
+it('reads an order time from the hour the spring clock change skips', function () {
+    expect(Order::fromFields(['order_id' => 'x', 'order_time' => '29.03.2026 03:30:00'])->orderTime?->utc()->format('Y-m-d H:i'))
+        ->toBe('2026-03-29 01:30');
+});
 
 it('reads a settlement date as the start of that day', function () {
     expect(Order::fromFields(['order_id' => 'x', 'settlement_date' => '09.11.2026'])->settlementDate?->format('Y-m-d H:i:s T'))

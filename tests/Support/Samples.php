@@ -6,6 +6,7 @@ namespace ClassAtlas\Flitt\Tests\Support;
 
 use ClassAtlas\Flitt\Protocol\Body;
 use ClassAtlas\Flitt\Protocol\Envelope;
+use Closure;
 use RuntimeException;
 
 /**
@@ -15,6 +16,34 @@ use RuntimeException;
 final class Samples
 {
     public const array FILES = ['callbacks.json', 'checkout-variants.json'];
+
+    /**
+     * Order fields kept in $raw only: the signature, Flitt's debugging string, a legacy field, and additional_info,
+     * which AdditionalInfo reads.
+     */
+    public const array RAW_ONLY_ORDER_FIELDS = ['signature', 'response_signature_string', 'fee_oplata', 'additional_info'];
+
+    /**
+     * additional_info keys kept in $raw only.
+     */
+    public const array RAW_ONLY_ADDITIONAL_INFO = ['recurring_data'];
+
+    /**
+     * The first sample that matches.
+     *
+     * @param  Closure(array<string, mixed>): bool  $matches
+     * @return array<string, mixed>
+     */
+    public static function first(Closure $matches): array
+    {
+        foreach (self::dataset() as [$sample]) {
+            if ($matches($sample)) {
+                return $sample;
+            }
+        }
+
+        throw new RuntimeException('No sample matches.');
+    }
 
     /**
      * Every sample, keyed "file: name", for a Pest dataset.

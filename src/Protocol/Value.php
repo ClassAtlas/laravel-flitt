@@ -6,8 +6,9 @@ namespace ClassAtlas\Flitt\Protocol;
 
 use BackedEnum;
 use Carbon\CarbonImmutable;
-use Carbon\Exceptions\InvalidFormatException;
 use ClassAtlas\Flitt\Signing\PythonText;
+use DateTimeImmutable;
+use DateTimeZone;
 
 /**
  * @internal Reads one decoded value, tolerantly: whatever cannot be read becomes null, and the original stays in raw.
@@ -28,7 +29,7 @@ final class Value
     }
 
     /**
-     * A whole number sent as an integer or as digits; "" and anything else is null.
+     * A whole number sent as an integer or as digits, up to PHP_INT_MAX; "" and anything else is null.
      */
     public static function integer(mixed $value): ?int
     {
@@ -36,11 +37,13 @@ final class Value
             return $value;
         }
 
-        if (! is_string($value) || preg_match('/^-?\d{1,18}$/', $value) !== 1) {
+        if (! is_string($value) || preg_match('/^(-?)0*(\d{1,19})$/', $value, $parts) !== 1) {
             return null;
         }
 
-        return (int) $value;
+        $integer = filter_var($parts[1].$parts[2], FILTER_VALIDATE_INT);
+
+        return $integer === false ? null : $integer;
     }
 
     public static function boolean(mixed $value): ?bool
@@ -83,7 +86,8 @@ final class Value
 
     /**
      * Flitt's local time without an offset ("08.11.2026 14:08:28", or "08.11.2026" for a day), read as Europe/Kyiv
-     * time, which Flitt's servers have used so far.
+     * time, which Flitt's servers have used so far. A day or month out of range is null; an hour skipped by the
+     * spring clock change is read as PHP reads it, an hour later.
      */
     public static function date(mixed $value): ?CarbonImmutable
     {
@@ -92,13 +96,14 @@ final class Value
         }
 
         $format = strlen($value) === 10 ? 'd.m.Y' : 'd.m.Y H:i:s';
-        try {
-            $date = CarbonImmutable::createFromFormat('!'.$format, $value, self::TIMEZONE);
-        } catch (InvalidFormatException) {
+        $date = DateTimeImmutable::createFromFormat('!'.$format, $value, new DateTimeZone(self::TIMEZONE));
+        $errors = DateTimeImmutable::getLastErrors();
+
+        if ($date === false || ($errors !== false && $errors['warning_count'] + $errors['error_count'] > 0)) {
             return null;
         }
 
-        return $date instanceof CarbonImmutable && $date->format($format) === $value ? $date : null;
+        return CarbonImmutable::instance($date);
     }
 
     /**
