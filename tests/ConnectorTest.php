@@ -166,3 +166,22 @@ it('logs to the configured channel when FLITT_LOG_REQUESTS is on', function () {
 it('refuses to call Flitt with no credentials at all', function () {
     app(Flitt::class)->connector();
 })->throws(MissingCredentialsException::class, 'No Flitt credentials');
+
+it('falls back to the default timeouts when a setting is empty or zero, which Guzzle would read as no timeout', function (mixed $timeout, mixed $connectTimeout) {
+    config(['flitt.merchant_id' => '1549901', 'flitt.payment_key' => 'test', 'flitt.timeout' => $timeout, 'flitt.connect_timeout' => $connectTimeout]);
+
+    expect(app(Flitt::class)->connector()->createPendingRequest(new ProbeRequest)->config()->all())->toMatchArray([
+        RequestOptions::TIMEOUT => 10,
+        RequestOptions::CONNECT_TIMEOUT => 3,
+    ]);
+})->with([
+    'empty' => ['', ''],
+    'zero' => [0, 0],
+    'negative' => [-5, '-1'],
+]);
+
+it('says which setting is wrong when FLITT_MERCHANT_ID is not a merchant id', function () {
+    config(['flitt.merchant_id' => '15499O1', 'flitt.payment_key' => 'test']);
+
+    app(Flitt::class)->connector();
+})->throws(InvalidParameterException::class, 'FLITT_MERCHANT_ID must be a whole number above 0');

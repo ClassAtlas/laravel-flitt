@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ClassAtlas\Flitt;
 
+use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
 use ClassAtlas\Flitt\Exceptions\MissingCredentialsException;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
@@ -35,12 +36,23 @@ final readonly class Flitt
      * @internal The credentials a call made through this client uses: its own, or else the merchant in config/flitt.php.
      *
      * @throws MissingCredentialsException when there are neither
+     * @throws InvalidParameterException when FLITT_MERCHANT_ID is set to something that is not a merchant id
      */
     public function credentials(): Credentials
     {
-        return $this->credentials
-            ?? new ConfigCredentialsResolver($this->config)->configured()
-            ?? throw MissingCredentialsException::none();
+        $credentials = $this->credentials ?? new ConfigCredentialsResolver($this->config)->configured();
+
+        if ($credentials !== null) {
+            return $credentials;
+        }
+
+        $merchantId = $this->config->get('flitt.merchant_id');
+
+        if ($merchantId !== null && $merchantId !== '') {
+            throw InvalidParameterException::invalid('FLITT_MERCHANT_ID', 'must be a whole number above 0');
+        }
+
+        throw MissingCredentialsException::none();
     }
 
     /**
@@ -69,10 +81,13 @@ final readonly class Flitt
         return $this->log->channel(is_string($channel) && $channel !== '' ? $channel : null);
     }
 
+    /**
+     * A timeout of 0 would make Guzzle wait forever, so an empty, zero or negative setting falls back to the default.
+     */
     private function integerSetting(string $key, int $default): int
     {
         $value = $this->config->get($key);
 
-        return is_numeric($value) ? (int) $value : $default;
+        return is_numeric($value) && (int) $value > 0 ? (int) $value : $default;
     }
 }
