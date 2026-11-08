@@ -116,7 +116,7 @@ Every method sets the Flitt parameter of the same name. Each returns a new build
 | `merchantData(string)`                  | `merchant_data`             | Echoed back in every answer and callback                             |
 | `preauth(bool = true)`                  | `preauth`                   | Hold the money; capture it later                                     |
 | `delayed(bool)`                         | `delayed`                   | Default on: a declined payer may retry on the same page              |
-| `requiredRectoken(bool = true)`         | `required_rectoken`         | Ask for a card token for recurring charges                           |
+| `requiredRectoken(bool = true)`         | `required_rectoken`         | Ask for a card token for [recurring charges](#recurring-charges)     |
 | `verification(bool = true)`             | `verification`              | Approve the card only to keep its token; Flitt says it reverses the amount itself |
 | `senderEmail(string)`                   | `sender_email`              |                                                                       |
 | `lang(Lang)`                            | `lang`                      | Page language, e.g. `Lang::KA`                                        |
@@ -141,7 +141,7 @@ Flitt::checkout(...)->paymentSystems(PaymentSystem::INSTALLMENTS)->paymentMethod
 > **These payments cannot be reversed through the API.** Flitt refuses a reverse of an open-banking or installment
 > order. Their callbacks also carry the payer's IBAN and name in `additionalInfo`: treat them as personal data.
 
-To charge a saved card, use a recurring charge: Flitt's page cannot pay with a saved card.
+To charge a saved card, use a [recurring charge](#recurring-charges): Flitt's page cannot pay with a saved card.
 
 ## Order status
 
@@ -160,6 +160,29 @@ returns. Its properties are Flitt's order fields in camelCase; `$order->raw` kee
 
 `orderStatus` alone does not say everything: a partial reverse keeps `APPROVED`, and a hold is `APPROVED` too. Read
 `reversalAmount`, `settlementAmount` and `additionalInfo->captureStatus` beside it.
+
+## Recurring charges
+
+Save the card's token on a first checkout with `requiredRectoken()` (or with `verification()` too, to approve the card
+without keeping the money); it arrives as `$order->rectoken` in the callback. Then charge it without the payer:
+
+```php
+$order = Flitt::recurring(
+    orderId: 'inv-1043',
+    amount: 12_500,
+    currency: Currency::GEL,
+    orderDesc: 'Tuition, December',
+    rectoken: $savedCard->rectoken,
+)
+    ->serverCallbackUrl(route('flitt.callback'))
+    ->charge();
+```
+
+Options: `serverCallbackUrl`, `lifetime`, `merchantData`, `preauth`, `senderEmail`, `productId`, `clientIp` and
+`reservationData`, as for a checkout. The card's CVV is never sent: it is card data.
+
+There is no 3-D Secure on a recurring charge, and no page: the answer is final. Flitt has no call to delete a token; it
+lapses with the card (`$order->rectokenLifetime`).
 
 ## Callbacks and browser returns
 

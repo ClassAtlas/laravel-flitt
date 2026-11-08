@@ -25,11 +25,13 @@ All notable changes to `class-atlas/laravel-flitt` are listed here. The format f
   finished with `url()` (`CheckoutUrl`) or `token()` (`CheckoutToken`). Open banking and installments are options.
   `ReservationData` for the payer details Flitt passes to the bank.
 - `Flitt::status($orderId)`, returning `Order`.
+- `Flitt::recurring(orderId:, amount:, currency:, orderDesc:, rectoken:)`, an immutable builder finished with
+  `charge()`, to charge a card saved with `requiredRectoken()`. No CVV is ever sent.
 - `Http\CallbackRequest` and `Http\BrowserReturnRequest`: form requests that check a callback or browser return
   before the controller runs (403 for a bad signature or an unknown merchant, 400 for an unreadable body), with
   `->order()`.
 - `Callbacks\CallbackVerifier::verify($body, $contentType)` for bodies processed later. Payout callbacks are checked
   with the credit key; protocol 2.0 bodies are read too.
-- The Saloon requests `CheckoutUrlRequest`, `CheckoutTokenRequest` and `OrderStatusRequest`.
+- The Saloon requests `CheckoutUrlRequest`, `CheckoutTokenRequest`, `OrderStatusRequest` and `RecurringRequest`.
 - The enums `OrderStatus`, `TranType`, `CaptureStatus`, `ReverseStatus`, `Currency`, `Lang`, `PaymentSystem` and
   `PaymentMethod`. A value this version does not know reads as `null` and never breaks parsing.
