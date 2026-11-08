@@ -22,14 +22,16 @@ Flitt's **public test merchant** instead (`1549901`, payment key `test`, credit 
 Those credentials are public and hard-coded; there is no `.env`. Both modes refuse any other merchant.
 
 ```bash
-FLITT_LIVE=1 composer test     # every operation against the test merchant; nothing is written
-FLITT_RECORD=1 composer test   # the same, and the answers are saved as fixtures
+FLITT_LIVE=1 composer test -- --group=live     # the live suite against the test merchant; nothing is written
+FLITT_RECORD=1 composer test -- --group=live   # the same, and each answer is saved as its fixture
 ```
 
-Recorded answers are scrubbed before they are saved, then signed again with the public key: the payer's IP address
-becomes `203.0.113.10`, emails move to `example.com`, and the IBAN and name an open-banking payment carries are
-replaced. A guard test fails on any fixture with another merchant id, an IP address outside `203.0.113.0/24`, or a
-masked card that is not one of Flitt's published test cards. Read the fixture diff before you commit it.
+Each run sends new order ids, because Flitt refuses an order id it has already seen with other parameters. Fixtures
+live in `tests/Fixtures/Saloon`, one file per answer. Before an answer is saved it is scrubbed, then signed again with
+the public key: the caller's IP address becomes `203.0.113.10`, emails move to `example.com`, an open-banking payer's
+IBAN and name are replaced, and the run's order ids become the fixed ids the default run sends. A guard test fails on
+any fixture with another merchant id, an IP address outside `203.0.113.0/24`, a card that is not one of Flitt's
+published test cards, or an email outside `example.com`. Read the fixture diff before you commit it.
 
 The live suite also runs every day in CI (the `Live` workflow), and on a pull request labelled `live`. It is never a
 required check: Flitt's test merchant can be down without anything being wrong here.
@@ -43,7 +45,7 @@ the payment page. They are captured by hand when Flitt changes them:
    `response_url` and `cancel_url` pointing at it.
 2. Pay with Flitt's [test cards](https://docs.flitt.com/api/testing/), including a declined one and a 3-D Secure one.
 3. Save each raw body with its content type, scrub it the same way as above, and sign it again with the public key.
-4. Add it to `tests/Fixtures/Callbacks`, run the tests, and read the diff.
+4. Add it to `tests/Fixtures/callbacks.json`, run the tests (the guard reads it too), and read the diff.
 
 ## Pull requests
 

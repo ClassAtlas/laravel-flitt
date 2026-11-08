@@ -1,0 +1,84 @@
+name: Live
+
+# The live suite against Flitt's public test merchant, with new order ids each run. Never a required check: the test
+# merchant can be down without anything being wrong here. A failed scheduled run opens one issue (or comments on the
+# open one); the next green scheduled run closes it.
+on:
+  schedule:
+    - cron: '41 5 * * *'
+  workflow_dispatch:
+  pull_request:
+    types: [ labeled, opened, synchronize, reopened ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  live:
+    name: Live run on the test merchant
+    if: >-
+      github.repository == 'ClassAtlas/laravel-flitt'
+      && (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'live'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Live suite
+        env:
+          FLITT_LIVE: '1'
+        run: vendor/bin/pest --group=live
+
+  report:
+    name: Open or close the live-run issue
+    needs: live
+    if: always() && github.event_name == 'schedule' && github.repository == 'ClassAtlas/laravel-flitt'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Open, comment on or close the issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RESULT: ${{ needs.live.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create live-run --color B60205 --description "The daily live run failed" 2>/dev/null || true
+          open=$(gh issue list --label live-run --state open --json number --jq '.[0].number // empty')
+
+          if [ "$RESULT" = "success" ]; then
+            if [ -n "$open" ]; then
+              gh issue close "$open" --comment "The live run is green again: $RUN_URL"
+            fi
+          elif [ "$RESULT" = "failure" ]; then
+            if [ -n "$open" ]; then
+              gh issue comment "$open" --body "Failed again: $RUN_URL"
+            else
+              gh issue create \
+                --title "The daily live run against Flitt's test merchant failed" \
+                --label live-run \
+                --assignee kirkita \
+                --body "The scheduled live run failed: $RUN_URL
+
+          Flitt may have changed something, or its test merchant may be down. Run \`FLITT_LIVE=1 composer test -- --group=live\` to see which. This issue closes itself after the next green scheduled run."
+            fi
+          fi
