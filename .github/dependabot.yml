@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # A library's constraints are what its users have to install. "widen" adds a new release to a range and keeps its
+    # minimum; "increase" would raise every user's minimum with each upstream release.
+    versioning-strategy: "widen"
+    cooldown:
+      default-days: 5
+    groups:
+      composer-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 5
+    groups:
+      actions-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"

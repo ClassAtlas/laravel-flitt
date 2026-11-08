@@ -1,0 +1,77 @@
+{
+    "name": "class-atlas/laravel-flitt",
+    "description": "Laravel client for the Flitt payment gateway: hosted checkout, order status, recurring charges, payouts and signed callbacks.",
+    "keywords": [
+        "laravel",
+        "flitt",
+        "fondy",
+        "payments",
+        "payment-gateway",
+        "georgia",
+        "saloon"
+    ],
+    "homepage": "https://github.com/ClassAtlas/laravel-flitt",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Irakli Kirkitadze",
+            "email": "kirkita205@gmail.com",
+            "role": "Author"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ClassAtlas/laravel-flitt/issues",
+        "source": "https://github.com/ClassAtlas/laravel-flitt",
+        "security": "https://github.com/ClassAtlas/laravel-flitt/security/policy"
+    },
+    "require": {
+        "php": "^8.4",
+        "laravel/framework": "^13.0",
+        "saloonphp/saloon": "^4.5.1",
+        "spatie/laravel-package-tools": "^1.93"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.14",
+        "laravel/pint": "^1.32",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^5.3",
+        "pestphp/pest-plugin-arch": "^5.0",
+        "phpstan/phpstan-deprecation-rules": "^2.0"
+    },
+    "suggest": {
+        "saloonphp/laravel-plugin": "Saloon's Laravel integration, if you want its Artisan commands and events alongside this package"
+    },
+    "autoload": {
+        "psr-4": {
+            "ClassAtlas\\Flitt\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ClassAtlas\\Flitt\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "analyse": "phpstan analyse",
+        "format": "pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ClassAtlas\\Flitt\\FlittServiceProvider"
+            ],
+            "aliases": {
+                "Flitt": "ClassAtlas\\Flitt\\Facades\\Flitt"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
