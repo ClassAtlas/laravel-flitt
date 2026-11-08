@@ -22,7 +22,7 @@ use Saloon\Http\Faking\MockResponse;
 
 it('sends to pay.flitt.com with the timeouts it was given', function () {
     $pendingRequest = new FlittConnector(new Credentials(1549901, 'test'), timeout: 25, connectTimeout: 5)
-        ->createPendingRequest(new ProbeRequest);
+        ->createPendingRequest(new ProbeRequest, new MockClient([ProbeRequest::class => MockResponse::make()]));
 
     expect($pendingRequest->getUrl())->toBe('https://pay.flitt.com/api/status/order_id')
         ->and($pendingRequest->getMethod()->value)->toBe('POST')
@@ -164,7 +164,7 @@ it('refuses to call Flitt with no credentials at all', function () {
 it('falls back to the default timeouts when a setting is empty or zero, which Guzzle would read as no timeout', function (mixed $timeout, mixed $connectTimeout) {
     config(['flitt.merchant_id' => '1549901', 'flitt.payment_key' => 'test', 'flitt.timeout' => $timeout, 'flitt.connect_timeout' => $connectTimeout]);
 
-    expect(app(Flitt::class)->connector()->createPendingRequest(new ProbeRequest)->config()->all())->toMatchArray([
+    expect(app(Flitt::class)->connector()->createPendingRequest(new ProbeRequest, new MockClient([ProbeRequest::class => MockResponse::make()]))->config()->all())->toMatchArray([
         RequestOptions::TIMEOUT => 10,
         RequestOptions::CONNECT_TIMEOUT => 3,
     ]);
