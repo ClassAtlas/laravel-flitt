@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ClassAtlas\Flitt\Tests\Support;
 
 use ClassAtlas\Flitt\Credentials;
+use ClassAtlas\Flitt\Flitt;
 use ClassAtlas\Flitt\FlittConnector;
 use LogicException;
 use Saloon\Config;
@@ -60,6 +61,14 @@ final class Live
     }
 
     /**
+     * The client for the test merchant.
+     */
+    public static function client(): Flitt
+    {
+        return app(Flitt::class)->withCredentials(self::credentials());
+    }
+
+    /**
      * An order id for one test. Fixtures hold a fixed id; a run against Flitt needs a new one each time, because Flitt
      * refuses an order id it has seen with other parameters. Recording writes the fixed id back into the fixture.
      */
@@ -87,7 +96,8 @@ final class Live
     }
 
     /**
-     * Answers each request class from its fixture, or sends it to Flitt in live mode.
+     * Answers each request class from its fixture, or sends it to Flitt in live mode. A later call for the same class
+     * replaces its fixture.
      *
      * @param  array<class-string, string>  $fixtures  request class => fixture name
      */
@@ -97,7 +107,7 @@ final class Live
             return;
         }
 
-        MockClient::global(array_map(static fn (string $name): FlittFixture => new FlittFixture($name), $fixtures));
+        MockClient::global()->addResponses(array_map(static fn (string $name): FlittFixture => new FlittFixture($name), $fixtures));
     }
 
     /**

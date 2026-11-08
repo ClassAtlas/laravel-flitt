@@ -21,5 +21,10 @@ All notable changes to `class-atlas/laravel-flitt` are listed here. The format f
 - `Responses\Order` and `Responses\AdditionalInfo`: Flitt's order fields in camelCase, amounts as integers in minor
   units (major-unit decimals converted exactly), dates as `CarbonImmutable` in Europe/Kyiv, and `raw` with everything
   Flitt sent.
+- `Flitt::checkout(orderId:, amount:, currency:, orderDesc:)`, an immutable builder with Flitt's checkout options,
+  finished with `url()` (`CheckoutUrl`) or `token()` (`CheckoutToken`). Open banking and installments are options.
+  `ReservationData` for the payer details Flitt passes to the bank.
+- `Flitt::status($orderId)`, returning `Order`.
+- The Saloon requests `CheckoutUrlRequest`, `CheckoutTokenRequest` and `OrderStatusRequest`.
 - The enums `OrderStatus`, `TranType`, `CaptureStatus`, `ReverseStatus`, `Currency`, `Lang`, `PaymentSystem` and
   `PaymentMethod`. A value this version does not know reads as `null` and never breaks parsing.
