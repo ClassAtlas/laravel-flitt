@@ -22,6 +22,9 @@ final class FlittServiceProvider extends PackageServiceProvider
     {
         $this->app->bindIf(CredentialsResolver::class, ConfigCredentialsResolver::class);
 
-        $this->app->scoped(Flitt::class, static fn (Application $app): Flitt => new Flitt($app->make('config')));
+        $this->app->scoped(Flitt::class, static fn (Application $app): Flitt => new Flitt(
+            $app->make('config'),
+            $app->make('log'),
+        ));
     }
 }

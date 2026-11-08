@@ -1,0 +1,701 @@
+{
+    "about": "Signature vectors from Flitt's public test merchant 1549901 (payment key \"test\", credit key \"testcredit\"), recorded on 2026-11-08. Every request in request_accepted was accepted by Flitt and every request in request_rejected was refused with 1014. Responses and protocol 2.0 bodies were signed by Flitt; those marked scrubbed_and_resigned had the payer's IP replaced with 203.0.113.10 and were signed again with the public key. \"<KEY>\" in a presign string stands for the key. not_signed lists parameters Flitt does not know, which it accepts only when they are left out of the signature.",
+    "request_accepted": [
+        {
+            "name": "checkout/url minimal, no version",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132508116-url1",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL"
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order|lf-research-1794132508116-url1",
+            "signature": "074e5d0b43df7dca9a43ac4a0054e915cf41ccf2",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "checkout/url version 1.0.1 included in signature",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132522657-v101-signed",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "version": "1.0.1"
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order|lf-research-1794132522657-v101-signed|1.0.1",
+            "signature": "c2f0c04d59f7e364c3f6bc8daed8b47c105d6d6e",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "merchant_data \"0\" is kept",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132714453-zero-str-incl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "merchant_data": "0"
+            },
+            "presign": "<KEY>|125|GEL|0|1549901|Research order|lf-research-1794132714453-zero-str-incl",
+            "signature": "828d6e359c8dee021ddd85a95a317f9a994100c7",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "merchant_data 0 (JSON number) is kept",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132716828-zero-num-incl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "merchant_data": 0
+            },
+            "presign": "<KEY>|125|GEL|0|1549901|Research order|lf-research-1794132716828-zero-num-incl",
+            "signature": "2bada4683cbc8d9bc7eeeb395e3915deb5fa950a",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "merchant_data \"\" is dropped",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132711573-empty-excl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "merchant_data": ""
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order|lf-research-1794132711573-empty-excl",
+            "signature": "346ba31de4e5d9a3a794901d2a0dfda733a5c196",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "sigsem amount and merchant_id as strings",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132718090-str-nums",
+                "merchant_id": "1549901",
+                "order_desc": "Research order",
+                "amount": "125",
+                "currency": "GEL"
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order|lf-research-1794132718090-str-nums",
+            "signature": "bf23e1529e32effd20ab61434db68afb4bfa2211",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "Georgian UTF-8 order_desc, lang=ka",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132719393-utf8",
+                "merchant_id": 1549901,
+                "order_desc": "სწავლის საფასური — ნოემბერი",
+                "amount": 125,
+                "currency": "GEL",
+                "lang": "ka"
+            },
+            "presign": "<KEY>|125|GEL|ka|1549901|სწავლის საფასური — ნოემბერი|lf-research-1794132719393-utf8",
+            "signature": "47e7fa119f464086b921bd5ec77eb5b8c5228220",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "trailing space kept verbatim (no trim)",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132734357-trailing-space",
+                "merchant_id": 1549901,
+                "order_desc": "Research order ",
+                "amount": 125,
+                "currency": "GEL"
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order |lf-research-1794132734357-trailing-space",
+            "signature": "717aff565357dcd1a8c1aefcca10c24c3f3aeaec",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "unknown param zz_unknown sent but NOT signed",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794133214005-unknown-excl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "zz_unknown": "xyz"
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order|lf-research-1794133214005-unknown-excl",
+            "signature": "1c0a3bb600ac29e8a868ebe700be76d3b4e2e228",
+            "flitt_accepted": true,
+            "flitt_result": "success",
+            "not_signed": [
+                "zz_unknown"
+            ]
+        },
+        {
+            "name": "reservation_data base64 signed as plain string",
+            "endpoint": "/api/checkout/url",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794133215181-resdata",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "reservation_data": "eyJjdXN0b21lcl9jb3VudHJ5IjoiR0UiLCJhY2NvdW50IjoiYWNjdC00MiJ9"
+            },
+            "presign": "<KEY>|125|GEL|1549901|Research order|lf-research-1794133215181-resdata|eyJjdXN0b21lcl9jb3VudHJ5IjoiR0UiLCJhY2NvdW50IjoiYWNjdC00MiJ9",
+            "signature": "c209392fad8cb2ab4c8432a20dca31459d8b868a",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "status",
+            "endpoint": "/api/status/order_id",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132508116-url1",
+                "merchant_id": 1549901
+            },
+            "presign": "<KEY>|1549901|lf-research-1794132508116-url1",
+            "signature": "7ae9a9516bd949f1cddc51b8273b625c74309b06",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "capture",
+            "endpoint": "/api/capture/order_id",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "merchant_id": 1549901,
+                "amount": 600,
+                "currency": "GEL"
+            },
+            "presign": "<KEY>|600|GEL|1549901|lf-research-1794132567285-direct-preauth",
+            "signature": "14d1cf39fa7395f01fb175dd27dd8f51c9565f29",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "reverse with comment + reverse_id",
+            "endpoint": "/api/reverse/order_id",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "merchant_id": 1549901,
+                "amount": 200,
+                "currency": "GEL",
+                "reverse_id": "lf-rev-1",
+                "comment": "Research partial"
+            },
+            "presign": "<KEY>|200|Research partial|GEL|1549901|lf-research-1794132567285-direct-preauth|lf-rev-1",
+            "signature": "66bee0e11df832adf6b87aa98726fa5ff5b74709",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "direct step1 (test card)",
+            "endpoint": "/api/3dsecure_step1",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 1000,
+                "currency": "GEL",
+                "card_number": "4444555511116666",
+                "cvv2": "123",
+                "expiry_date": "1230",
+                "preauth": "Y",
+                "required_rectoken": "Y"
+            },
+            "presign": "<KEY>|1000|4444555511116666|GEL|123|1230|1549901|Research order|lf-research-1794132567285-direct-preauth|Y|Y",
+            "signature": "2513047a6de21b2fa339ff1eaa29af63d41ad30d",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "recurring",
+            "endpoint": "/api/recurring",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132644079-recurring",
+                "merchant_id": 1549901,
+                "order_desc": "Research recurring",
+                "amount": 300,
+                "currency": "GEL",
+                "rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG"
+            },
+            "presign": "<KEY>|300|GEL|1549901|Research recurring|lf-research-1794132644079-recurring|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG",
+            "signature": "9bf9311220090b9ce20a1ec51b300bb2119739ba",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "transaction_list",
+            "endpoint": "/api/transaction_list",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "merchant_id": 1549901
+            },
+            "presign": "<KEY>|1549901|lf-research-1794132567285-direct-preauth",
+            "signature": "138f576d2c955581c9437b087588a9a4598f1418",
+            "flitt_accepted": true,
+            "flitt_result": "success (bare array)"
+        },
+        {
+            "name": "p2pcredit (credit key)",
+            "endpoint": "/api/p2pcredit",
+            "key": "testcredit",
+            "params": {
+                "order_id": "lf-research-1794132678939-p2p",
+                "merchant_id": 1549901,
+                "order_desc": "Research payout",
+                "amount": 200,
+                "currency": "GEL",
+                "receiver_rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG"
+            },
+            "presign": "<KEY>|200|GEL|1549901|Research payout|lf-research-1794132678939-p2p|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG",
+            "signature": "dd3d8ad24c436423598a5e79e9badc5cc29c23bd",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "ibancredit (credit key)",
+            "endpoint": "/api/ibancredit",
+            "key": "testcredit",
+            "params": {
+                "order_id": "lf-research-1794132680627-iban",
+                "merchant_id": 1549901,
+                "order_desc": "Research payout",
+                "amount": 200,
+                "currency": "GEL",
+                "receiver_iban": "GE00TB0000000000000001",
+                "receiver_name": "Research Receiver"
+            },
+            "presign": "<KEY>|200|GEL|1549901|Research payout|lf-research-1794132680627-iban|GE00TB0000000000000001|Research Receiver",
+            "signature": "c396a5c3c3be6913789f20a520f698ed8e76295e",
+            "flitt_accepted": true,
+            "flitt_result": "success"
+        },
+        {
+            "name": "subscription stop (signature accepted; order has no subscription -> 1018)",
+            "endpoint": "/api/subscription",
+            "key": "test",
+            "params": {
+                "order_id": "lf-research-1794133006077-direct-sub-v20",
+                "merchant_id": 1549901,
+                "action": "stop"
+            },
+            "presign": "<KEY>|stop|1549901|lf-research-1794133006077-direct-sub-v20",
+            "signature": "e211c65da6976673f33af16501b48e8989eca8f9",
+            "flitt_accepted": true,
+            "flitt_result": "1018 (signature passed)"
+        }
+    ],
+    "request_rejected": [
+        {
+            "name": "sigsem empty string included as empty slot",
+            "params": {
+                "order_id": "lf-research-1794132712079-empty-incl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "merchant_data": ""
+            },
+            "signature_sent": "6142b187940aec548884acb54e56106c4a0199cb",
+            "why_wrong": "\"\" added as an empty slot (key||...)",
+            "flitt_result": 1014
+        },
+        {
+            "name": "sigsem string 0 excluded",
+            "params": {
+                "order_id": "lf-research-1794132715681-zero-str-excl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "merchant_data": "0"
+            },
+            "signature_sent": "de7a40faed7dff0216f87c1fbc112fa26c201789",
+            "why_wrong": "\"0\" dropped from the string",
+            "flitt_result": 1014
+        },
+        {
+            "name": "checkout/url version 1.0.1 excluded from signature",
+            "params": {
+                "order_id": "lf-research-1794132523112-v101-unsigned",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "version": "1.0.1"
+            },
+            "signature_sent": "8a762db4aca5ea9e26f89d639f9ee9962919ab9e",
+            "why_wrong": "version sent but not signed",
+            "flitt_result": 1014
+        },
+        {
+            "name": "sigsem unknown param included in signature",
+            "params": {
+                "order_id": "lf-research-1794133212721-unknown-incl",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "zz_unknown": "xyz"
+            },
+            "signature_sent": "0a32577be77688bebecf628957ee1e48dc93a670",
+            "why_wrong": "unknown param zz_unknown signed",
+            "flitt_result": 1014
+        },
+        {
+            "name": "sigsem uppercase hex signature",
+            "params": {
+                "order_id": "lf-research-1794133212409-upper",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL"
+            },
+            "signature_sent": "D9F5273AACB9B19F46580A8943A5DA56883A3851",
+            "why_wrong": "uppercase hex",
+            "flitt_result": 1014
+        },
+        {
+            "name": "p2pcredit signed with payment key (wrong)",
+            "params": {
+                "order_id": "lf-research-1794132679886-p2p-paykey",
+                "merchant_id": 1549901,
+                "order_desc": "Research payout",
+                "amount": 200,
+                "currency": "GEL",
+                "receiver_rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG"
+            },
+            "signature_sent": "657bab1e9ef6571bceff2916085eda7ab922bf03",
+            "why_wrong": "payout signed with payment key \"test\"",
+            "flitt_result": 1014
+        },
+        {
+            "name": "status of purchase order signed with testcredit",
+            "params": {
+                "order_id": "lf-research-1794132642529-direct-sale",
+                "merchant_id": 1549901
+            },
+            "signature_sent": "21c4711892f89613f0ee88b8e3578e53a405c5ac",
+            "why_wrong": "status signed with credit key",
+            "flitt_result": 1014
+        },
+        {
+            "name": "edge pipe in merchant_data",
+            "params": {
+                "order_id": "lf-research-1794132734066-pipe",
+                "merchant_id": 1549901,
+                "order_desc": "Research order",
+                "amount": 125,
+                "currency": "GEL",
+                "merchant_data": "a|b"
+            },
+            "signature_sent": "02e01c8629869006d8ea48d61d16fa301eee0252",
+            "why_wrong": "\"|\" inside a value (signed verbatim)",
+            "flitt_result": 1014
+        }
+    ],
+    "response": [
+        {
+            "name": "reverse response with comment",
+            "endpoint": "/api/reverse/order_id",
+            "key": "test",
+            "response": {
+                "reverse_status": "approved",
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "response_description": "",
+                "response_code": "",
+                "merchant_id": 1549901,
+                "response_status": "success",
+                "signature": "878bde71de0e08f599aeb8d853247ec86dea8c5d",
+                "reverse_id": "lf-rev-1",
+                "reversal_amount": "200",
+                "transaction_id": "2298080906",
+                "comment": "Research partial",
+                "response_signature_string": "**********|Research partial|1549901|lf-research-1794132567285-direct-preauth|success|200|lf-rev-1|approved|2298080906"
+            },
+            "presign": "<KEY>|Research partial|1549901|lf-research-1794132567285-direct-preauth|success|200|lf-rev-1|approved|2298080906",
+            "signature": "878bde71de0e08f599aeb8d853247ec86dea8c5d",
+            "verified_against_flitt": true,
+            "scrubbed_and_resigned": false
+        },
+        {
+            "name": "reverse response, reverse_id \"\" dropped",
+            "endpoint": "/api/reverse/order_id",
+            "key": "test",
+            "response": {
+                "reverse_status": "approved",
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "response_description": "",
+                "response_code": "",
+                "merchant_id": 1549901,
+                "response_status": "success",
+                "signature": "35fd9457b1f52008429a4ce4da652544628aaa78",
+                "reverse_id": "",
+                "reversal_amount": "50",
+                "transaction_id": "2298081025",
+                "response_signature_string": "**********|1549901|lf-research-1794132567285-direct-preauth|success|50|approved|2298081025"
+            },
+            "presign": "<KEY>|1549901|lf-research-1794132567285-direct-preauth|success|50|approved|2298081025",
+            "signature": "35fd9457b1f52008429a4ce4da652544628aaa78",
+            "verified_against_flitt": true,
+            "scrubbed_and_resigned": false
+        },
+        {
+            "name": "status of created order",
+            "endpoint": "/api/status/order_id",
+            "key": "test",
+            "response": {
+                "rrn": "",
+                "masked_card": "",
+                "sender_cell_phone": "",
+                "sender_account": "",
+                "currency": "GEL",
+                "fee": "",
+                "reversal_amount": "0",
+                "settlement_amount": "0",
+                "actual_amount": "",
+                "response_description": "",
+                "sender_email": "",
+                "order_status": "created",
+                "response_status": "success",
+                "order_time": "08.11.2026 12:08:28",
+                "actual_currency": "",
+                "order_id": "lf-research-1794132508116-url1",
+                "tran_type": "purchase",
+                "eci": "",
+                "settlement_date": "",
+                "payment_system": "",
+                "approval_code": "",
+                "merchant_id": 1549901,
+                "settlement_currency": "",
+                "payment_id": 1029157899,
+                "card_bin": "",
+                "response_code": "",
+                "card_type": "",
+                "amount": "125",
+                "signature": "fb789fb9c141b5da4c2d8c8e702ba3231fd3fd49",
+                "product_id": "",
+                "merchant_data": "",
+                "rectoken": "",
+                "rectoken_lifetime": "",
+                "verification_status": "",
+                "parent_order_id": "",
+                "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": null}",
+                "fee_oplata": "0",
+                "response_signature_string": "**********|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": null}|125|GEL|0|1549901|lf-research-1794132508116-url1|created|08.11.2026 12:08:28|1029157899|success|0|0|purchase"
+            },
+            "presign": "<KEY>|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": null}|125|GEL|0|1549901|lf-research-1794132508116-url1|created|08.11.2026 12:08:28|1029157899|success|0|0|purchase",
+            "signature": "fb789fb9c141b5da4c2d8c8e702ba3231fd3fd49",
+            "verified_against_flitt": true,
+            "scrubbed_and_resigned": true
+        },
+        {
+            "name": "approved preauth order (is_test masked in rss)",
+            "endpoint": "/api/3dsecure_step1",
+            "key": "test",
+            "response": {
+                "rrn": "1794132568",
+                "masked_card": "444455XXXXXX6666",
+                "sender_cell_phone": "",
+                "sender_account": "",
+                "currency": "GEL",
+                "fee": "",
+                "reversal_amount": "0",
+                "settlement_amount": "1000",
+                "actual_amount": "1000",
+                "response_description": "",
+                "sender_email": "",
+                "order_status": "approved",
+                "response_status": "success",
+                "order_time": "08.11.2026 12:09:27",
+                "actual_currency": "GEL",
+                "order_id": "lf-research-1794132567285-direct-preauth",
+                "tran_type": "purchase",
+                "eci": "7",
+                "settlement_date": "",
+                "payment_system": "card",
+                "approval_code": "418900",
+                "merchant_id": 1549901,
+                "settlement_currency": "",
+                "payment_id": 1029158157,
+                "card_bin": 444455,
+                "response_code": "",
+                "card_type": "VISA",
+                "amount": "1000",
+                "signature": "73af8204d19a8f3ca4f3b46fc7f91147b884e4e9",
+                "product_id": "",
+                "merchant_data": "",
+                "rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG",
+                "rectoken_lifetime": "01.01.2031 00:00:00",
+                "verification_status": "",
+                "parent_order_id": "",
+                "additional_info": "{\"capture_status\": \"hold\", \"capture_amount\": 0.0, \"reservation_data\": null, \"transaction_id\": 2298080697, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:09:28\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"is_test\": true, \"schemeid\": \"mBS8MDuWOpyhdw8aveS\", \"acq_tran_id\": \"0c08abf0-9c78-43ed-9ca9-b27f642decf1\"}",
+                "response_signature_string": "**********|1000|GEL|{\"capture_status\": \"hold\", \"capture_amount\": 0.0, \"reservation_data\": null, \"transaction_id\": 2298080697, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:09:28\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"is_**********\": true, \"schemeid\": \"mBS8MDuWOpyhdw8aveS\", \"acq_tran_id\": \"0c08abf0-9c78-43ed-9ca9-b27f642decf1\"}|1000|418900|444455|VISA|GEL|7|444455XXXXXX6666|1549901|lf-research-1794132567285-direct-preauth|approved|08.11.2026 12:09:27|1029158157|card|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG|01.01.2031 00:00:00|success|0|1794132568|1000|purchase"
+            },
+            "presign": "<KEY>|1000|GEL|{\"capture_status\": \"hold\", \"capture_amount\": 0.0, \"reservation_data\": null, \"transaction_id\": 2298080697, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:09:28\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"is_test\": true, \"schemeid\": \"mBS8MDuWOpyhdw8aveS\", \"acq_tran_id\": \"0c08abf0-9c78-43ed-9ca9-b27f642decf1\"}|1000|418900|444455|VISA|GEL|7|444455XXXXXX6666|1549901|lf-research-1794132567285-direct-preauth|approved|08.11.2026 12:09:27|1029158157|card|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG|01.01.2031 00:00:00|success|0|1794132568|1000|purchase",
+            "signature": "73af8204d19a8f3ca4f3b46fc7f91147b884e4e9",
+            "verified_against_flitt": true,
+            "scrubbed_and_resigned": true
+        },
+        {
+            "name": "declined order, response_code int 1097",
+            "endpoint": "/api/3dsecure_step1",
+            "key": "test",
+            "response": {
+                "rrn": "",
+                "masked_card": "444411XXXXXX6666",
+                "sender_cell_phone": "",
+                "sender_account": "",
+                "currency": "GEL",
+                "fee": "",
+                "reversal_amount": "0",
+                "settlement_amount": "0",
+                "actual_amount": "",
+                "response_description": "Decline, refer to card issuer",
+                "sender_email": "",
+                "order_status": "declined",
+                "response_status": "success",
+                "order_time": "08.11.2026 12:10:59",
+                "actual_currency": "",
+                "order_id": "lf-research-1794132658573-direct-decline",
+                "tran_type": "purchase",
+                "eci": "",
+                "settlement_date": "",
+                "payment_system": "card",
+                "approval_code": "",
+                "merchant_id": 1549901,
+                "settlement_currency": "",
+                "payment_id": 1029158542,
+                "card_bin": 444411,
+                "response_code": 1097,
+                "card_type": "VISA",
+                "amount": "100",
+                "signature": "e3f5f6fd7295c344c4aece90ff52f5f03a821331",
+                "product_id": "",
+                "merchant_data": "",
+                "rectoken": "",
+                "rectoken_lifetime": "",
+                "verification_status": "",
+                "parent_order_id": "",
+                "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": null, \"transaction_id\": null, \"bank_response_code\": \"196\", \"bank_response_description\": \"RESULT: FAILED\\nRESULT_CODE: 196\\nREFUND_TRANS_ID: 8hQmBS8MDuWOpyhdw8aveS18lzE=\", \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:11:01\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\"}",
+                "response_signature_string": "**********|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": null, \"transaction_id\": null, \"bank_response_code\": \"196\", \"bank_response_description\": \"RESULT: FAILED\\nRESULT_CODE: 196\\nREFUND_TRANS_ID: 8hQmBS8MDuWOpyhdw8aveS18lzE=\", \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:11:01\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\"}|100|444411|VISA|GEL|444411XXXXXX6666|1549901|lf-research-1794132658573-direct-decline|declined|08.11.2026 12:10:59|1029158542|card|1097|Decline, refer to card issuer|success|0|0|purchase"
+            },
+            "presign": "<KEY>|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": null, \"transaction_id\": null, \"bank_response_code\": \"196\", \"bank_response_description\": \"RESULT: FAILED\\nRESULT_CODE: 196\\nREFUND_TRANS_ID: 8hQmBS8MDuWOpyhdw8aveS18lzE=\", \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:11:01\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\"}|100|444411|VISA|GEL|444411XXXXXX6666|1549901|lf-research-1794132658573-direct-decline|declined|08.11.2026 12:10:59|1029158542|card|1097|Decline, refer to card issuer|success|0|0|purchase",
+            "signature": "e3f5f6fd7295c344c4aece90ff52f5f03a821331",
+            "verified_against_flitt": true,
+            "scrubbed_and_resigned": true
+        },
+        {
+            "name": "p2pcredit response signed with credit key",
+            "endpoint": "/api/p2pcredit",
+            "key": "testcredit",
+            "response": {
+                "product_id": "",
+                "masked_card": "444455XXXXXX6666",
+                "currency": "GEL",
+                "response_description": "",
+                "order_status": "approved",
+                "response_status": "success",
+                "order_time": "08.11.2026 12:11:19",
+                "order_id": "lf-research-1794132678939-p2p",
+                "tran_type": "p2p credit",
+                "payment_system": "card",
+                "approval_code": "565656",
+                "merchant_id": 1549901,
+                "payment_id": 1029158623,
+                "card_bin": 444455,
+                "response_code": "",
+                "card_type": "VISA",
+                "amount": "200",
+                "signature": "a2322952eb3f47b00e3df43c6efe1a1561110a37",
+                "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": null, \"transaction_id\": 2298081354, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": null, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:11:19\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"is_test\": true, \"acq_tran_id\": \"8hQmBS8MDuWOpyhdw8aveS18lzE=\"}",
+                "response_signature_string": "**********|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": null, \"transaction_id\": 2298081354, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": null, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:11:19\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"is_test\": true, \"acq_tran_id\": \"8hQmBS8MDuWOpyhdw8aveS18lzE=\"}|200|565656|444455|VISA|GEL|444455XXXXXX6666|1549901|lf-research-1794132678939-p2p|approved|08.11.2026 12:11:19|1029158623|card|success|p2p credit"
+            },
+            "presign": "<KEY>|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": null, \"transaction_id\": 2298081354, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": null, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 12:11:19\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"is_test\": true, \"acq_tran_id\": \"8hQmBS8MDuWOpyhdw8aveS18lzE=\"}|200|565656|444455|VISA|GEL|444455XXXXXX6666|1549901|lf-research-1794132678939-p2p|approved|08.11.2026 12:11:19|1029158623|card|success|p2p credit",
+            "signature": "a2322952eb3f47b00e3df43c6efe1a1561110a37",
+            "verified_against_flitt": true,
+            "scrubbed_and_resigned": true
+        }
+    ],
+    "protocol_2_0": [
+        {
+            "name": "checkout/url protocol 2.0 envelope",
+            "key": "test",
+            "request": {
+                "version": "2.0",
+                "data": "eyJvcmRlciI6eyJvcmRlcl9pZCI6ImxmLXJlc2VhcmNoLTE3OTQxMzI1MzkyNzYtdjIwIiwibWVyY2hhbnRfaWQiOjE1NDk5MDEsIm9yZGVyX2Rlc2MiOiJSZXNlYXJjaCBvcmRlciIsImFtb3VudCI6MTI1LCJjdXJyZW5jeSI6IkdFTCJ9fQ==",
+                "signature": "40de782bb9b65365442c345672cad2e45f4cd11f"
+            },
+            "request_data_decoded": {
+                "order": {
+                    "order_id": "lf-research-1794132539276-v20",
+                    "merchant_id": 1549901,
+                    "order_desc": "Research order",
+                    "amount": 125,
+                    "currency": "GEL"
+                }
+            },
+            "response": {
+                "data": "eyJvcmRlciI6IHsiY2hlY2tvdXRfdXJsIjogImh0dHBzOi8vcGF5LmZsaXR0LmNvbS9tZXJjaGFudHMvNmFhNzk5NTdmNmY4MzM2YjgyMGU2YzgyYjc2MzRmMGMvZGVmYXVsdC9pbmRleC5odG1sP3Rva2VuPTk3OTMxMDQ1N2E5NDNkOTU0YjA3ZmQ1YzlkNzRlYWVlOTg5N2JiNGUiLCAicGF5bWVudF9pZCI6ICIxMDI5MTU4MDI4In19",
+                "version": "2.0",
+                "signature": "f2ee0cc1c54eaa3bcdfe60c93137d3b69801159a"
+            },
+            "formula": "sha1(<KEY>|<data>)"
+        },
+        {
+            "name": "p2pcredit via protocol 2.0, credit key",
+            "key": "testcredit",
+            "request": {
+                "version": "2.0",
+                "data": "eyJvcmRlciI6eyJvcmRlcl9pZCI6ImxmLXJlc2VhcmNoLTE3OTQxMzMxNzQzNjAtcDJwLXYyMCIsIm1lcmNoYW50X2lkIjoxNTQ5OTAxLCJvcmRlcl9kZXNjIjoiUmVzZWFyY2ggcGF5b3V0IiwiYW1vdW50IjoxNTAsImN1cnJlbmN5IjoiR0VMIiwicmVjZWl2ZXJfcmVjdG9rZW4iOiJJMHdoN2ZCbUZJZGNZNkszUHgyUXVnVnJWUjY1c1BhZmVaa1BtUmFuT2lSblhHIn19",
+                "signature": "cacdc728b4c570312582a060cecb68e4ea4972dc"
+            },
+            "request_data_decoded": {
+                "order": {
+                    "order_id": "lf-research-1794133174360-p2p-v20",
+                    "merchant_id": 1549901,
+                    "order_desc": "Research payout",
+                    "amount": 150,
+                    "currency": "GEL",
+                    "receiver_rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG"
+                }
+            },
+            "response": {
+                "note": "response data contains the requester IP; decode/verify locally from log"
+            },
+            "formula": "sha1(<KEY>|<data>)"
+        }
+    ]
+}

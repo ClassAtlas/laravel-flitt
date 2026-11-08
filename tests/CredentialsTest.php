@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use ClassAtlas\Flitt\Credentials;
+use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
@@ -58,3 +59,13 @@ it('marks the keys as sensitive, so stack traces leave them out', function () {
         ->and($parameters[1]->getAttributes(SensitiveParameter::class))->toHaveCount(1)
         ->and($parameters[2]->getAttributes(SensitiveParameter::class))->toHaveCount(1);
 });
+
+it('refuses credentials that cannot be right', function (int $merchantId, string $paymentKey, ?string $creditKey, string $parameter) {
+    expect(fn () => new Credentials($merchantId, $paymentKey, $creditKey))
+        ->toThrow(InvalidParameterException::class, $parameter);
+})->with([
+    'a merchant id of 0' => [0, 'test', null, 'merchantId'],
+    'a negative merchant id' => [-1, 'test', null, 'merchantId'],
+    'an empty payment key' => [1549901, '', null, 'paymentKey'],
+    'an empty credit key' => [1549901, 'test', '', 'creditKey'],
+]);
