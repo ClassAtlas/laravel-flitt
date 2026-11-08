@@ -7,6 +7,7 @@ namespace ClassAtlas\Flitt\Tests\Support;
 use ClassAtlas\Flitt\Protocol\Envelope;
 use ClassAtlas\Flitt\Signing\Signer;
 use ClassAtlas\Flitt\Signing\Verifier;
+use RuntimeException;
 
 /**
  * Cleans an answer recorded on the test merchant before it becomes a fixture, then signs it again with the public key.
@@ -34,7 +35,7 @@ final class Scrubber
         $decoded = json_decode($body, true, 64, JSON_THROW_ON_ERROR);
 
         if (! is_array($decoded) || ! is_array($decoded['response'] ?? null)) {
-            return $body;
+            throw new RuntimeException('Not saving an answer the scrubber cannot read: record it again, or scrub it by hand.');
         }
 
         $answer = $decoded['response'];
@@ -148,9 +149,9 @@ final class Scrubber
         $parts = [];
 
         foreach ($value as $key => $item) {
-            $parts[] = json_encode((string) $key, JSON_THROW_ON_ERROR).': '.(is_array($item)
+            $parts[] = json_encode((string) $key, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES).': '.(is_array($item)
                 ? self::pythonJson($item)
-                : json_encode($item, JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION));
+                : json_encode($item, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION));
         }
 
         return '{'.implode(', ', $parts).'}';

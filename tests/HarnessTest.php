@@ -50,6 +50,8 @@ it('catches a planted merchant, IP, card or email wherever it hides', function (
         'a real payer IP in additional_info' => [...$order, 'additional_info' => '{"ipaddress_v4": "91.151.136.10"}'],
         'a real card' => [...$order, 'masked_card' => '535528XXXXXX4401'],
         'a real email' => [...$order, 'sender_email' => 'nino@gmail.com'],
+        'a real payer IBAN' => [...$order, 'additional_info' => '{"payer_iban": "GE29TB7894545082100008"}'],
+        'a real payer name' => [...$order, 'additional_info' => '{"payer_name": "Nino Beridze"}'],
     };
 
     $problems = FixtureGuard::problems(json_encode(['samples' => [$planted]], JSON_THROW_ON_ERROR));
@@ -63,7 +65,17 @@ it('catches a planted merchant, IP, card or email wherever it hides', function (
     ['a real payer IP in additional_info', 'IP 91.151.136.10'],
     ['a real card', '535528XXXXXX4401'],
     ['a real email', 'email address'],
+    ['a real payer IBAN', 'demo bank'],
+    ['a real payer name', 'not a test name'],
 ]);
+
+it('refuses to save an answer it cannot scrub', function () {
+    Scrubber::answer('checkout_url=https%3A%2F%2Fpay.flitt.com&response_status=success');
+})->throws(JsonException::class);
+
+it('refuses to save JSON that is not a Flitt answer', function () {
+    Scrubber::answer('{"unexpected": true}');
+})->throws(RuntimeException::class, 'cannot read');
 
 it('scrubs a recorded answer and signs it again so it still verifies', function () {
     $recorded = [

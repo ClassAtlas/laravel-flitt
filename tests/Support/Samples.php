@@ -29,6 +29,11 @@ final class Samples
     public const array RAW_ONLY_ADDITIONAL_INFO = ['recurring_data'];
 
     /**
+     * @var array<string, array<string, mixed>>
+     */
+    private static array $files = [];
+
+    /**
      * The first sample that matches.
      *
      * @param  Closure(array<string, mixed>): bool  $matches
@@ -69,7 +74,7 @@ final class Samples
     public static function file(string $file): array
     {
         /** @var array<string, mixed> */
-        return json_decode((string) file_get_contents(__DIR__.'/../Fixtures/'.$file), true, flags: JSON_THROW_ON_ERROR);
+        return self::$files[$file] ??= json_decode((string) file_get_contents(__DIR__.'/../Fixtures/'.$file), true, flags: JSON_THROW_ON_ERROR);
     }
 
     /**

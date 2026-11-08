@@ -39,4 +39,4 @@ it('reads a new order\'s time as Europe/Kyiv time, so a time-zone shift at Flitt
 
     expect($order->orderTime)->toBeInstanceOf(CarbonImmutable::class)
         ->and(abs(CarbonImmutable::now()->diffInSeconds($order->orderTime)))->toBeLessThan(300);
-})->group('live')->skip(fn (): bool => ! Live::reachesFlitt(), 'Only meaningful against Flitt itself.');
+})->group('live')->skip(fn (): bool => Live::mode() !== 'live', 'Only meaningful in a live run, so it is never recorded.');

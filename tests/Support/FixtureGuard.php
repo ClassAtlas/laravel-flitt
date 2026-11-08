@@ -7,8 +7,8 @@ namespace ClassAtlas\Flitt\Tests\Support;
 use ClassAtlas\Flitt\Protocol\Body;
 
 /**
- * Finds what must never be committed as a fixture: another merchant, a real payer's IP address, a real card or a real
- * email address. It reads JSON, form bodies, protocol 2.0 envelopes and additional_info strings at any depth.
+ * Finds what must never be committed as a fixture: another merchant, a real payer's IP address, IBAN or name, a real
+ * card or a real email address. It reads JSON, form bodies, protocol 2.0 envelopes and additional_info strings at any depth.
  */
 final class FixtureGuard
 {
@@ -20,6 +20,11 @@ final class FixtureGuard
         '6666444455551111', '4444555566669999', '4444666655559999', '4444999966665555', '4444666699995555',
         '2222555566663333', '4444777799991111', '9860010099998881', '8600202020202023', '9860010088889992',
     ];
+
+    /**
+     * The payer names Flitt's demo bank sends, and the one the scrubber writes.
+     */
+    public const array TEST_PAYER_NAMES = ['jon doe', Scrubber::PAYER_NAME];
 
     /**
      * @return list<string> one line per problem; empty when the content is safe to commit
@@ -75,6 +80,8 @@ final class FixtureGuard
             'ipaddress_v4' => str_starts_with($text, '203.0.113.') ? null : "IP {$text} is outside 203.0.113.0/24",
             'masked_card' => in_array($text, self::testCardMasks(), true) ? null : "{$text} is not a Flitt test card",
             'card_number' => in_array($text, self::TEST_CARDS, true) ? null : 'a card number that is not a Flitt test card',
+            'payer_iban', 'masked_iban' => preg_match('/^GE\d{2}XB/', $text) === 1 ? null : 'an IBAN outside Flitt\'s demo bank (XB)',
+            'payer_name' => in_array($text, self::TEST_PAYER_NAMES, true) ? null : 'a payer name that is not a test name',
             default => null,
         };
 

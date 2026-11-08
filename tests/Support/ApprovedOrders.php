@@ -18,8 +18,7 @@ final class ApprovedOrders
         Live::answer([Step1Request::class => "step1/{$name}"]);
 
         $request = new Step1Request(Live::orderId($name), $amount, $preauth, $requiredRectoken);
-        $order = $request->createDtoFromResponse(new FlittConnector(Live::credentials(), timeout: 30)->send($request));
 
-        return $order;
+        return $request->createDtoFromResponse(new FlittConnector(Live::credentials(), timeout: 30)->send($request));
     }
 }
