@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace ClassAtlas\Flitt;
 
+use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
+
 /**
  * Details about the payer that Flitt passes to the bank (reservation_data). Flitt accepts Latin letters, digits and
- * separators in these values. Fiscal product lines are not covered.
+ * separators in these values, so transliterate names and addresses. Fiscal product lines are not covered.
  */
 final readonly class ReservationData
 {
@@ -21,7 +23,13 @@ final readonly class ReservationData
         public ?string $account = null,
         public ?string $uuid = null,
         public ?string $settlementId = null,
-    ) {}
+    ) {
+        foreach (get_object_vars($this) as $field => $value) {
+            if (is_string($value) && preg_match('/^[\x20-\x7E]*$/', $value) !== 1) {
+                throw InvalidParameterException::invalid($field, 'must use Latin letters, digits and separators only, as Flitt requires');
+            }
+        }
+    }
 
     /**
      * @internal Flitt's form: base64 of compact JSON, without the fields that are not set.

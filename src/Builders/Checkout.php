@@ -168,6 +168,10 @@ final class Checkout
      */
     public function paymentSystems(PaymentSystem ...$paymentSystems): self
     {
+        if ($paymentSystems === []) {
+            throw InvalidParameterException::invalid('paymentSystems', 'needs at least one payment system');
+        }
+
         $values = array_map(static fn (PaymentSystem $system): string => $system->value, $paymentSystems);
 
         return $this->with('payment_systems', implode(',', array_unique($values)));

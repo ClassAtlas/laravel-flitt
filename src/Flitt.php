@@ -45,6 +45,10 @@ final readonly class Flitt
      */
     public function status(string $orderId): Order
     {
+        if ($orderId === '') {
+            throw InvalidParameterException::invalid('orderId', 'must not be empty');
+        }
+
         $request = new OrderStatusRequest($orderId);
 
         return $request->createDtoFromResponse($this->send($request));

@@ -145,10 +145,13 @@ it('refuses values Flitt would refuse', function (string $parameter) {
         'orderDesc' => fn () => Flitt::checkout('inv-1', 100, Currency::GEL, ''),
         'amount' => fn () => Flitt::checkout('inv-1', -1, Currency::GEL, 'x'),
         'lifetime' => fn () => Flitt::checkout('inv-1', 100, Currency::GEL, 'x')->lifetime(0),
+        'paymentSystems' => fn () => Flitt::checkout('inv-1', 100, Currency::GEL, 'x')->paymentSystems(),
+        'customerName' => fn () => new ReservationData(customerName: 'ნინო ბერიძე'),
+        'status orderId' => fn () => Flitt::status(''),
     };
 
-    expect($build)->toThrow(InvalidParameterException::class, $parameter);
-})->with(['orderId', 'orderDesc', 'amount', 'lifetime']);
+    expect($build)->toThrow(InvalidParameterException::class, str_replace('status ', '', $parameter));
+})->with(['orderId', 'orderDesc', 'amount', 'lifetime', 'paymentSystems', 'customerName', 'status orderId']);
 
 it('reads an order\'s status and checks its signature', function () {
     $answer = Vectors::dataset('response')['status of created order'][0]['response'];
