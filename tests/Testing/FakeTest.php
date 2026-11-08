@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Carbon\CarbonImmutable;
 use ClassAtlas\Flitt\Credentials;
 use ClassAtlas\Flitt\Enums\Currency;
 use ClassAtlas\Flitt\Enums\OrderStatus;
@@ -134,4 +135,23 @@ it('fills a fake callback with every field a real one has', function () {
     $fake = FakeCallback::for(FakeOrder::approved())->signedWith('test');
 
     expect(array_diff(array_keys($real), array_keys($fake), ['response_signature_string', 'fee_oplata']))->toBe([]);
+});
+
+it('keeps the fake after scoped instances are reset, as the queue worker does between jobs', function () {
+    Flitt::fake();
+
+    app()->forgetScopedInstances();
+
+    app(ClassAtlas\Flitt\Flitt::class)->status('inv-1042');
+    Flitt::assertSent(OrderStatusRequest::class);
+});
+
+it('dates a fake order in Flitt\'s time zone, on the test clock', function () {
+    CarbonImmutable::setTestNow('2026-11-08 10:00:00 UTC');
+
+    try {
+        expect(FakeCallback::for(FakeOrder::approved())->signedWith('test')['order_time'])->toBe('08.11.2026 12:00:00');
+    } finally {
+        CarbonImmutable::setTestNow();
+    }
 });

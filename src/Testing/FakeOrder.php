@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace ClassAtlas\Flitt\Testing;
 
+use Carbon\CarbonImmutable;
 use ClassAtlas\Flitt\Enums\Currency;
 use ClassAtlas\Flitt\Enums\OrderStatus;
 use ClassAtlas\Flitt\Enums\TranType;
+use ClassAtlas\Flitt\Protocol\Value;
 
 /**
  * An order for tests: a prepared answer for Flitt::fake(), or the content of a FakeCallback. Every method returns a new
@@ -75,12 +77,18 @@ final class FakeOrder
 
     public function orderId(string $orderId): self
     {
-        return $this->with('orderId', $orderId);
+        $order = clone $this;
+        $order->orderId = $orderId;
+
+        return $order;
     }
 
     public function merchantId(int $merchantId): self
     {
-        return $this->with('merchantId', $merchantId);
+        $order = clone $this;
+        $order->merchantId = $merchantId;
+
+        return $order;
     }
 
     /**
@@ -88,12 +96,18 @@ final class FakeOrder
      */
     public function amount(int $amount): self
     {
-        return $this->with('amount', $amount);
+        $order = clone $this;
+        $order->amount = $amount;
+
+        return $order;
     }
 
     public function currency(Currency $currency): self
     {
-        return $this->with('currency', $currency);
+        $order = clone $this;
+        $order->currency = $currency;
+
+        return $order;
     }
 
     /**
@@ -101,7 +115,10 @@ final class FakeOrder
      */
     public function transactionId(int $transactionId): self
     {
-        return $this->with('transactionId', $transactionId);
+        $order = clone $this;
+        $order->transactionId = $transactionId;
+
+        return $order;
     }
 
     /**
@@ -109,12 +126,18 @@ final class FakeOrder
      */
     public function rectoken(string $rectoken): self
     {
-        return $this->with('rectoken', $rectoken);
+        $order = clone $this;
+        $order->rectoken = $rectoken;
+
+        return $order;
     }
 
     public function merchantData(string $merchantData): self
     {
-        return $this->with('merchantData', $merchantData);
+        $order = clone $this;
+        $order->merchantData = $merchantData;
+
+        return $order;
     }
 
     /**
@@ -122,7 +145,10 @@ final class FakeOrder
      */
     public function payout(): self
     {
-        return $this->with('tranType', TranType::P2P_CREDIT);
+        $order = clone $this;
+        $order->tranType = TranType::P2P_CREDIT;
+
+        return $order;
     }
 
     /**
@@ -140,7 +166,7 @@ final class FakeOrder
         $rectoken = $this->rectoken ?? self::text($defaults['rectoken'] ?? null) ?? '';
         $paid = $this->orderStatus === OrderStatus::APPROVED || $this->orderStatus === OrderStatus::REVERSED;
         $transactionId = $this->transactionId ?? abs(crc32($orderId.$this->orderStatus->value));
-        $now = date('d.m.Y H:i:s');
+        $now = CarbonImmutable::now(Value::TIMEZONE)->format('d.m.Y H:i:s');
 
         return [
             'order_id' => $orderId,
@@ -188,14 +214,6 @@ final class FakeOrder
                 'is_test' => true,
             ], JSON_THROW_ON_ERROR),
         ];
-    }
-
-    private function with(string $property, mixed $value): self
-    {
-        $order = clone $this;
-        $order->{$property} = $value;
-
-        return $order;
     }
 
     private static function text(mixed $value): ?string

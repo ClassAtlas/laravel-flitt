@@ -34,9 +34,11 @@ final class Flitt extends Facade
      */
     public static function fake(array $responses = []): FlittClient
     {
-        $fake = self::getFacadeApplication()?->make(FlittClient::class)->faked(FakeAnswers::mockClient($responses))
-            ?? throw new LogicException('Flitt::fake() needs a Laravel application.');
+        $app = self::getFacadeApplication() ?? throw new LogicException('Flitt::fake() needs a Laravel application.');
+        $fake = $app->make(FlittClient::class)->faked(FakeAnswers::mockClient($responses));
 
+        // Bound again, so the fake survives a reset of scoped instances (the queue worker, Octane).
+        $app->scoped(FlittClient::class, static fn (): FlittClient => $fake);
         self::swap($fake);
 
         return $fake;
