@@ -57,22 +57,7 @@ These are Flitt's public test credentials: they work against the real host, `pay
 | `log_requests`           | `FLITT_LOG_REQUESTS`    | `false` | Log each call (see [Logging](#logging))                  |
 | `log_channel`            | `FLITT_LOG_CHANNEL`     | default | Log channel for those lines                              |
 
-An app with several merchants passes credentials per call instead:
-
-```php
-use ClassAtlas\Flitt\Credentials;
-
-$flitt = Flitt::withCredentials(new Credentials(
-    merchantId: $school->flitt_merchant_id,
-    paymentKey: $school->flitt_payment_key,
-    creditKey: $school->flitt_credit_key,   // optional, for payouts
-));
-
-$checkout = $flitt->checkout(...)->url();
-```
-
-A call without credentials falls back to `config/flitt.php`; with neither, it throws `MissingCredentialsException`
-rather than guessing a merchant.
+An app with several merchants passes credentials per call instead: see [Several merchants](#several-merchants).
 
 ## Amounts, currencies and dates
 
@@ -114,8 +99,8 @@ For Flitt's embedded checkout or mobile SDKs, ask for a token instead of a URL:
 $token = Flitt::checkout(...)->token();   // $token->token
 ```
 
-What the payer did arrives twice: as a callback to your server, and as the payer's browser coming back to
-`responseUrl`. **The callback is the source of truth.**
+What the payer did arrives twice: as a [callback](#callbacks-and-browser-returns) to your server, and as the payer's
+browser coming back to `responseUrl`. **The callback is the source of truth.**
 
 ### Checkout options
 
@@ -124,7 +109,7 @@ Every method sets the Flitt parameter of the same name. Each returns a new build
 
 | Method                                  | Flitt parameter             | Notes                                                                 |
 |-----------------------------------------|-----------------------------|-----------------------------------------------------------------------|
-| `serverCallbackUrl(string)`             | `server_callback_url`       | Where Flitt posts the callback                                       |
+| `serverCallbackUrl(string)`             | `server_callback_url`       | Where Flitt posts the [callback](#callbacks-and-browser-returns)     |
 | `responseUrl(string)`                   | `response_url`              | Where the payer's browser returns                                    |
 | `cancelUrl(string)`                     | `cancel_url`                | Where the payer lands after "Cancel"                                 |
 | `lifetime(int $seconds)`                | `lifetime`                  | Default 36000 (10 hours); then the order expires                     |
@@ -176,6 +161,121 @@ returns. Its properties are Flitt's order fields in camelCase; `$order->raw` kee
 `orderStatus` alone does not say everything: a partial reverse keeps `APPROVED`, and a hold is `APPROVED` too. Read
 `reversalAmount`, `settlementAmount` and `additionalInfo->captureStatus` beside it.
 
+## Callbacks and browser returns
+
+Flitt posts each event (a payment attempt, a capture, each reverse, a recurring charge, a payout's result) to
+`serverCallbackUrl`, and sends the payer's browser back to `responseUrl` or `cancelUrl`. Both carry the same signed
+order. The package checks the signature before your controller runs.
+
+```php
+// routes/web.php
+Route::post('flitt/callback', FlittCallbackController::class)->name('flitt.callback');
+Route::post('flitt/return', FlittReturnController::class)->name('flitt.return');
+```
+
+Both arrive as cross-site `POST`s, so exclude them from CSRF, and don't rely on the session in them:
+
+```php
+// bootstrap/app.php
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->validateCsrfTokens(except: ['flitt/callback', 'flitt/return']);
+})
+```
+
+```php
+use ClassAtlas\Flitt\Http\CallbackRequest;
+
+final class FlittCallbackController
+{
+    public function __invoke(CallbackRequest $request): Response
+    {
+        HandleFlittOrder::dispatch($request->order());
+
+        return response('', 200);
+    }
+}
+```
+
+```php
+use ClassAtlas\Flitt\Http\BrowserReturnRequest;
+
+final class FlittReturnController
+{
+    public function __invoke(BrowserReturnRequest $request): RedirectResponse
+    {
+        $order = $request->order();
+
+        // Show the result page with a GET. The callback, not this return, decides whether the order is paid.
+        return redirect()->route('invoices.show', $order->orderId, status: 303);
+    }
+}
+```
+
+**When a check fails**, the request answers `403` (bad or missing signature, unknown merchant) or `400` (a body it cannot
+read), never `200`. Flitt keeps retrying a callback for about a day, so callbacks missed while a key was wrong arrive
+again once it is fixed.
+
+**Handle each event once, for the right merchant:**
+
+- Look the order up by `$order->merchantId` **and** `$order->orderId`, never by `orderId` alone. An order id is unique
+  only within one merchant, and anyone holding a merchant's key can sign a callback for that merchant.
+- Retries repeat the event exactly. `$order->additionalInfo->transactionId` is new for every event and the same on a
+  retry: store it and skip ones you have seen.
+- A payer's browser may come back before the callback arrives, or twice.
+
+**Processing a stored body later**, outside a request:
+
+```php
+use ClassAtlas\Flitt\Callbacks\CallbackVerifier;
+
+$order = app(CallbackVerifier::class)->verify($body, $contentType);   // throws on a bad signature
+```
+
+Flitt sends callbacks from the addresses listed in its documentation (`3.75.125.89` so far). The package does not check
+them: the signature proves the sender. Add a firewall rule if you want one.
+
+## Several merchants
+
+Pass credentials per call. The client you get back uses them for every call made through it:
+
+```php
+use ClassAtlas\Flitt\Credentials;
+
+$flitt = Flitt::withCredentials(new Credentials(
+    merchantId: $school->flitt_merchant_id,
+    paymentKey: $school->flitt_payment_key,
+    creditKey: $school->flitt_credit_key,   // optional, for payouts
+));
+
+$checkout = $flitt->checkout(...)->url();
+```
+
+A call without credentials falls back to `config/flitt.php`; with neither, it throws `MissingCredentialsException`
+rather than guessing a merchant.
+
+Callbacks need the right key too. Bind a resolver that finds the credentials for the `merchant_id` in the callback, or
+`null` for a merchant you don't know:
+
+```php
+use ClassAtlas\Flitt\Contracts\CredentialsResolver;
+use ClassAtlas\Flitt\Credentials;
+
+final class SchoolCredentialsResolver implements CredentialsResolver
+{
+    public function forMerchant(int $merchantId): ?Credentials
+    {
+        $school = School::firstWhere('flitt_merchant_id', $merchantId);
+
+        return $school?->flittCredentials();
+    }
+}
+
+// AppServiceProvider::register()
+$this->app->bind(CredentialsResolver::class, SchoolCredentialsResolver::class);
+```
+
+The default resolver reads `config/flitt.php` and knows only that merchant.
+
 ## Errors
 
 Every exception extends `ClassAtlas\Flitt\Exceptions\FlittException`.
@@ -185,6 +285,7 @@ Every exception extends `ClassAtlas\Flitt\Exceptions\FlittException`.
 | `ApiErrorException`           | Flitt answered with an error: `$e->errorCode` (e.g. `1018`), `$e->errorMessage`, `$e->requestId` |
 | `ConnectionFailedException`   | No answer: a timeout or a network failure                                                    |
 | `InvalidSignatureException`   | An answer or callback whose signature does not match, or is missing                          |
+| `UnknownMerchantException`    | A callback for a merchant your resolver doesn't know                                         |
 | `MissingCredentialsException` | No credentials for a call, or a payout without a credit key                                  |
 | `InvalidParameterException`   | A value Flitt cannot accept, such as one containing `|`                                     |
 

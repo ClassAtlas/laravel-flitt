@@ -6,7 +6,9 @@ namespace ClassAtlas\Flitt\Tests\Support;
 
 use ClassAtlas\Flitt\Protocol\Body;
 use ClassAtlas\Flitt\Protocol\Envelope;
+use ClassAtlas\Flitt\Tests\TestCase;
 use Closure;
+use Illuminate\Testing\TestResponse;
 use RuntimeException;
 
 /**
@@ -32,6 +34,16 @@ final class Samples
      * @var array<string, array<string, mixed>>
      */
     private static array $files = [];
+
+    /**
+     * Posts a sample's body to a route exactly as Flitt sends it: raw, with its Content-Type.
+     *
+     * @param  array<string, mixed>  $sample
+     */
+    public static function post(TestCase $test, array $sample, string $uri, ?string $body = null): TestResponse
+    {
+        return $test->call('POST', $uri, server: ['CONTENT_TYPE' => $sample['content_type']], content: $body ?? $sample['body']);
+    }
 
     /**
      * The first sample that matches.

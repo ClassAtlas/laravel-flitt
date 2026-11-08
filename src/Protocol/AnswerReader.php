@@ -35,34 +35,12 @@ final class AnswerReader
         $payload = self::payload($response, $operation);
         self::throwIfError($payload, $operation);
 
-        if (array_is_list($payload)) {
-            throw ConnectionFailedException::unreadable($operation);
-        }
-
-        $source = "Flitt's answer to the {$operation} call";
-
-        if (Envelope::is($payload)) {
-            $data = $payload['data'];
-            $order = Envelope::order($payload);
-
-            if (! is_string($data) || $order === null) {
-                throw ConnectionFailedException::unreadable($operation);
-            }
-
-            if ($signed || isset($payload['signature'])) {
-                Verifier::envelope(Body::stringKeyed($payload), $data, $order, $credentials, $source);
-            }
-
-            return $order + Body::stringKeyed(array_intersect_key($payload, ['response_status' => true]));
-        }
-
-        $fields = Body::stringKeyed($payload);
-
-        if ($signed || (isset($fields['signature']) && $fields['signature'] !== '')) {
-            Verifier::flat($fields, $credentials, $source);
-        }
-
-        return $fields;
+        return Verifier::order(
+            $payload,
+            static fn (): Credentials => $credentials,
+            "Flitt's answer to the {$operation} call",
+            $signed,
+        ) ?? throw ConnectionFailedException::unreadable($operation);
     }
 
     /**
