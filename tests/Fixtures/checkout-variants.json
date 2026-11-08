@@ -1,0 +1,900 @@
+{
+  "about": "Server callbacks and browser returns for the saved-card, open banking and installment checkouts on Flitt's public test merchant 1549901, captured 2026-11-08. Bodies are verbatim except that the payer IP in additional_info.ipaddress_v4 is replaced with 203.0.113.10 and the signature recomputed with the public test key ('scrubbed': true). Payment key 'test', credit key 'testcredit'. api_responses: the API calls behind them (request without signature, response verbatim; status responses scrubbed the same way).",
+  "samples": [
+    {
+      "name": "return/save-3ds",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:38:29.025+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794145108&masked_card=444455XXXXXX1111&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A37%3A41&actual_currency=GEL&order_id=lf-var-1794145060919-save-3ds&tran_type=purchase&eci=&settlement_date=&payment_system=card&approval_code=565656&merchant_id=1549901&settlement_currency=&payment_id=1029211735&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=9002495c4dfd18f1687dc411b71138eec534b9e6&product_id=&merchant_data=md-save-3ds&rectoken=6aDyYLI2n7aq6ZHBBIiwwglz97emriquch&rectoken_lifetime=01.12.2026+00%3A00%3A00&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298156521%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A38%3A28%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22oHk2Od5Na9Tq3YT%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298156521%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A38%3A28%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22oHk2Od5Na9Tq3YT%22%7D%7C125%7C565656%7C444455%7CVISA%7CGEL%7C444455XXXXXX1111%7Cmd-save-3ds%7C1549901%7Clf-var-1794145060919-save-3ds%7Capproved%7C08.11.2026+15%3A37%3A41%7C1029211735%7Ccard%7C6aDyYLI2n7aq6ZHBBIiwwglz97emriquch%7C01.12.2026+00%3A00%3A00%7Csuccess%7C0%7C1794145108%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/save-no3ds",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:39:01.651+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794145141&masked_card=444455XXXXXX6666&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A37%3A42&actual_currency=GEL&order_id=lf-var-1794145061241-save-no3ds&tran_type=purchase&eci=7&settlement_date=&payment_system=card&approval_code=418900&merchant_id=1549901&settlement_currency=&payment_id=1029211742&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=99581b3459a529c774fa8f0b5dc9c65f78f7beee&product_id=&merchant_data=md-save-no3ds&rectoken=I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG&rectoken_lifetime=01.12.2026+00%3A00%3A00&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298156811%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A39%3A01%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22f5311b56-7364-4c76-bc5a-b060f46a0433%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298156811%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A39%3A01%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22f5311b56-7364-4c76-bc5a-b060f46a0433%22%7D%7C125%7C418900%7C444455%7CVISA%7CGEL%7C7%7C444455XXXXXX6666%7Cmd-save-no3ds%7C1549901%7Clf-var-1794145061241-save-no3ds%7Capproved%7C08.11.2026+15%3A37%3A42%7C1029211742%7Ccard%7CI0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG%7C01.12.2026+00%3A00%3A00%7Csuccess%7C0%7C1794145141%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/rec-no3ds",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:40:14.868+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794145214&masked_card=444455XXXXXX1111&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A39%3A22&actual_currency=GEL&order_id=lf-var-1794145161054-rec-no3ds&tran_type=purchase&eci=&settlement_date=&payment_system=card&approval_code=565656&merchant_id=1549901&settlement_currency=&payment_id=1029212229&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=e06d7e4ec068bc9419b548ca15c4deacb2beee6a&product_id=&merchant_data=md-rec-no3ds&rectoken=I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298157247%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A40%3A14%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22d22cUozaWrKVNuL%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298157247%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A40%3A14%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22d22cUozaWrKVNuL%22%7D%7C125%7C565656%7C444455%7CVISA%7CGEL%7C444455XXXXXX1111%7Cmd-rec-no3ds%7C1549901%7Clf-var-1794145161054-rec-no3ds%7Capproved%7C08.11.2026+15%3A39%3A22%7C1029212229%7Ccard%7CI0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG%7Csuccess%7C0%7C1794145214%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/rec-3ds",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:41:28.028+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794145287&masked_card=444455XXXXXX6666&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A39%3A21&actual_currency=GEL&order_id=lf-var-1794145160688-rec-3ds&tran_type=purchase&eci=&settlement_date=&payment_system=card&approval_code=565656&merchant_id=1549901&settlement_currency=&payment_id=1029212221&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=c49ad7c40b490401c7d602130fdbbe5a58ce3bef&product_id=&merchant_data=md-rec-3ds&rectoken=6aDyYLI2n7aq6ZHBBIiwwglz97emriquch&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298157693%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A41%3A27%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22xnmiiqrdWIcWlep%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298157693%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A41%3A27%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22xnmiiqrdWIcWlep%22%7D%7C125%7C565656%7C444455%7CVISA%7CGEL%7C444455XXXXXX6666%7Cmd-rec-3ds%7C1549901%7Clf-var-1794145160688-rec-3ds%7Capproved%7C08.11.2026+15%3A39%3A21%7C1029212221%7Ccard%7C6aDyYLI2n7aq6ZHBBIiwwglz97emriquch%7Csuccess%7C0%7C1794145287%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/rec-same",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:42:25.961+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794145345&masked_card=444455XXXXXX6666&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A41%3A51&actual_currency=GEL&order_id=lf-var-1794145310866-rec-same&tran_type=purchase&eci=&settlement_date=&payment_system=card&approval_code=565656&merchant_id=1549901&settlement_currency=&payment_id=1029212936&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=7509874ff0e79a9af4a2d467bcb119e34846e0e6&product_id=&merchant_data=md-rec-same&rectoken=I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158043%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A42%3A25%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22led7aKNWry9r7LO%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158043%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A42%3A25%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22led7aKNWry9r7LO%22%7D%7C125%7C565656%7C444455%7CVISA%7CGEL%7C444455XXXXXX6666%7Cmd-rec-same%7C1549901%7Clf-var-1794145310866-rec-same%7Capproved%7C08.11.2026+15%3A41%3A51%7C1029212936%7Ccard%7CI0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG%7Csuccess%7C0%7C1794145345%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/ctl-no3ds",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:43:07.322+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794145386&masked_card=444455XXXXXX6666&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A42%3A35&actual_currency=GEL&order_id=lf-var-1794145355397-ctl-no3ds&tran_type=purchase&eci=7&settlement_date=&payment_system=card&approval_code=418900&merchant_id=1549901&settlement_currency=&payment_id=1029213112&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=09664afdea044d9fbe44d4881392f9080e66b42d&product_id=&merchant_data=md-ctl-no3ds&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158377%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A43%3A06%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22f16600e7-7d87-4662-9d0e-20846fc43c2f%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158377%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A43%3A06%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22f16600e7-7d87-4662-9d0e-20846fc43c2f%22%7D%7C125%7C418900%7C444455%7CVISA%7CGEL%7C7%7C444455XXXXXX6666%7Cmd-ctl-no3ds%7C1549901%7Clf-var-1794145355397-ctl-no3ds%7Capproved%7C08.11.2026+15%3A42%3A35%7C1029213112%7Ccard%7Csuccess%7C0%7C1794145386%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/opb",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:45:18.144+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=&masked_card=&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A37%3A43&actual_currency=GEL&order_id=lf-var-1794145062469-opb&tran_type=purchase&eci=&settlement_date=&payment_system=opb&approval_code=approv&merchant_id=1549901&settlement_currency=&payment_id=1029211748&card_bin=&response_code=&card_type=&amount=125&signature=f2c7db936a882141f9a2e6f854cf5a2ea717b878&product_id=&merchant_data=md-opb&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158510%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A45%3A14%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_test%22%3A+true%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158510%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A45%3A14%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_**********%22%3A+true%7D%7C125%7Capprov%7CGEL%7Cmd-opb%7C1549901%7Clf-var-1794145062469-opb%7Capproved%7C08.11.2026+15%3A37%3A43%7C1029211748%7Copb%7Csuccess%7C0%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/opb#2",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:45:29.389+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=&masked_card=&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A37%3A43&actual_currency=GEL&order_id=lf-var-1794145062469-opb&tran_type=purchase&eci=&settlement_date=&payment_system=opb&approval_code=approv&merchant_id=1549901&settlement_currency=&payment_id=1029211748&card_bin=&response_code=&card_type=&amount=125&signature=f2c7db936a882141f9a2e6f854cf5a2ea717b878&product_id=&merchant_data=md-opb&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158510%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A45%3A14%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_test%22%3A+true%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298158510%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A45%3A14%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_**********%22%3A+true%7D%7C125%7Capprov%7CGEL%7Cmd-opb%7C1549901%7Clf-var-1794145062469-opb%7Capproved%7C08.11.2026+15%3A37%3A43%7C1029211748%7Copb%7Csuccess%7C0%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/inst-100",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:49:58.930+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=&masked_card=&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=10000&actual_amount=10000&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A49%3A31&actual_currency=GEL&order_id=lf-var-1794145771046-inst-100&tran_type=purchase&eci=&settlement_date=&payment_system=installments&approval_code=approv&merchant_id=1549901&settlement_currency=&payment_id=1029215027&card_bin=&response_code=&card_type=&amount=10000&signature=e36bbdc9c7bb5a063bd754c9b731dac97a1fa615&product_id=&merchant_data=md-inst-100&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298160912%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A49%3A57%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22is_test%22%3A+true%7D&response_signature_string=**********%7C10000%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298160912%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A49%3A57%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22is_**********%22%3A+true%7D%7C10000%7Capprov%7CGEL%7Cmd-inst-100%7C1549901%7Clf-var-1794145771046-inst-100%7Capproved%7C08.11.2026+15%3A49%3A31%7C1029215027%7Cinstallments%7Csuccess%7C0%7C10000%7Cpurchase"
+    },
+    {
+      "name": "return/cb-rec",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:57:49.058+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=1794146268&masked_card=444455XXXXXX1111&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A57%3A10&actual_currency=GEL&order_id=lf-var-1794146230207-cb-rec&tran_type=purchase&eci=&settlement_date=&payment_system=card&approval_code=565656&merchant_id=1549901&settlement_currency=&payment_id=1029217126&card_bin=444455&response_code=&card_type=VISA&amount=125&signature=4e54cda8cd71bbdf84dfe8fde67d20d4336becf2&product_id=&merchant_data=md-cb-rec&rectoken=I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298164057%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A57%3A48%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_test%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22NVHFzS53c5pEQD4%22%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298164057%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+%22TBC+BANK%22%2C+%22bank_country%22%3A+%22GE%22%2C+%22card_type%22%3A+%22VISA%22%2C+%22card_product%22%3A+%22empty_visa%22%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A57%3A48%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22card%22%2C+%22version_3ds%22%3A+2%2C+%22is_**********%22%3A+true%2C+%22schemeid%22%3A+%22mBS8MDuWOpyhdw8aveS%22%2C+%22acq_tran_id%22%3A+%22NVHFzS53c5pEQD4%22%7D%7C125%7C565656%7C444455%7CVISA%7CGEL%7C444455XXXXXX1111%7Cmd-cb-rec%7C1549901%7Clf-var-1794146230207-cb-rec%7Capproved%7C08.11.2026+15%3A57%3A10%7C1029217126%7Ccard%7CI0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG%7Csuccess%7C0%7C1794146268%7C125%7Cpurchase"
+    },
+    {
+      "name": "cb/cb-rec",
+      "channel": "server_callback_url",
+      "received_utc": "2026-11-08T13:57:49.314+00:00",
+      "method": "POST",
+      "content_type": "application/json; charset=UTF-8",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; Twisted) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36",
+      "source_ip": "3.75.125.89",
+      "encoding": "json",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "{\"rrn\": \"1794146268\", \"masked_card\": \"444455XXXXXX1111\", \"sender_cell_phone\": \"\", \"sender_account\": \"\", \"currency\": \"GEL\", \"fee\": \"\", \"reversal_amount\": \"0\", \"settlement_amount\": \"125\", \"actual_amount\": \"125\", \"response_description\": \"\", \"sender_email\": \"\", \"order_status\": \"approved\", \"response_status\": \"success\", \"order_time\": \"08.11.2026 15:57:10\", \"actual_currency\": \"GEL\", \"order_id\": \"lf-var-1794146230207-cb-rec\", \"tran_type\": \"purchase\", \"eci\": \"\", \"settlement_date\": \"\", \"payment_system\": \"card\", \"approval_code\": \"565656\", \"merchant_id\": 1549901, \"settlement_currency\": \"\", \"payment_id\": 1029217126, \"card_bin\": 444455, \"response_code\": \"\", \"card_type\": \"VISA\", \"amount\": \"125\", \"signature\": \"4e54cda8cd71bbdf84dfe8fde67d20d4336becf2\", \"product_id\": \"\", \"merchant_data\": \"md-cb-rec\", \"rectoken\": \"I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG\", \"rectoken_lifetime\": \"\", \"verification_status\": \"\", \"parent_order_id\": \"\", \"additional_info\": \"{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298164057, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": \\\"TBC BANK\\\", \\\"bank_country\\\": \\\"GE\\\", \\\"card_type\\\": \\\"VISA\\\", \\\"card_product\\\": \\\"empty_visa\\\", \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 15:57:48\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"card\\\", \\\"version_3ds\\\": 2, \\\"is_test\\\": true, \\\"schemeid\\\": \\\"mBS8MDuWOpyhdw8aveS\\\", \\\"acq_tran_id\\\": \\\"NVHFzS53c5pEQD4\\\"}\", \"response_signature_string\": \"**********|125|GEL|{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298164057, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": \\\"TBC BANK\\\", \\\"bank_country\\\": \\\"GE\\\", \\\"card_type\\\": \\\"VISA\\\", \\\"card_product\\\": \\\"empty_visa\\\", \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 15:57:48\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"card\\\", \\\"version_3ds\\\": 2, \\\"is_**********\\\": true, \\\"schemeid\\\": \\\"mBS8MDuWOpyhdw8aveS\\\", \\\"acq_tran_id\\\": \\\"NVHFzS53c5pEQD4\\\"}|125|565656|444455|VISA|GEL|444455XXXXXX1111|md-cb-rec|1549901|lf-var-1794146230207-cb-rec|approved|08.11.2026 15:57:10|1029217126|card|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG|success|0|1794146268|125|purchase\"}"
+    },
+    {
+      "name": "cb/cb-opb",
+      "channel": "server_callback_url",
+      "received_utc": "2026-11-08T13:59:34.431+00:00",
+      "method": "POST",
+      "content_type": "application/json; charset=UTF-8",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; Twisted) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36",
+      "source_ip": "3.75.125.89",
+      "encoding": "json",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "{\"rrn\": \"\", \"masked_card\": \"\", \"sender_cell_phone\": \"\", \"sender_account\": \"\", \"currency\": \"GEL\", \"fee\": \"\", \"reversal_amount\": \"0\", \"settlement_amount\": \"125\", \"actual_amount\": \"125\", \"response_description\": \"\", \"sender_email\": \"\", \"order_status\": \"approved\", \"response_status\": \"success\", \"order_time\": \"08.11.2026 15:57:11\", \"actual_currency\": \"GEL\", \"order_id\": \"lf-var-1794146230471-cb-opb\", \"tran_type\": \"purchase\", \"eci\": \"\", \"settlement_date\": \"\", \"payment_system\": \"opb\", \"approval_code\": \"approv\", \"merchant_id\": 1549901, \"settlement_currency\": \"\", \"payment_id\": 1029217131, \"card_bin\": \"\", \"response_code\": \"\", \"card_type\": \"\", \"amount\": \"125\", \"signature\": \"35b1b788439a4b96961b9281e891ffbbfa89cdc9\", \"product_id\": \"\", \"merchant_data\": \"md-cb-opb\", \"rectoken\": \"\", \"rectoken_lifetime\": \"\", \"verification_status\": \"\", \"parent_order_id\": \"\", \"additional_info\": \"{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298164239, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": null, \\\"bank_country\\\": null, \\\"card_type\\\": null, \\\"card_product\\\": null, \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 15:59:33\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"X\\\", \\\"masked_iban\\\": \\\"GE40XB************8712\\\", \\\"payer_iban\\\": \\\"GE40XB7392732837248712\\\", \\\"payer_name\\\": \\\"jon doe\\\", \\\"is_test\\\": true}\", \"response_signature_string\": \"**********|125|GEL|{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298164239, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": null, \\\"bank_country\\\": null, \\\"card_type\\\": null, \\\"card_product\\\": null, \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 15:59:33\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"X\\\", \\\"masked_iban\\\": \\\"GE40XB************8712\\\", \\\"payer_iban\\\": \\\"GE40XB7392732837248712\\\", \\\"payer_name\\\": \\\"jon doe\\\", \\\"is_**********\\\": true}|125|approv|GEL|md-cb-opb|1549901|lf-var-1794146230471-cb-opb|approved|08.11.2026 15:57:11|1029217131|opb|success|0|125|purchase\"}"
+    },
+    {
+      "name": "return/cb-opb",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:59:37.831+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=&masked_card=&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A57%3A11&actual_currency=GEL&order_id=lf-var-1794146230471-cb-opb&tran_type=purchase&eci=&settlement_date=&payment_system=opb&approval_code=approv&merchant_id=1549901&settlement_currency=&payment_id=1029217131&card_bin=&response_code=&card_type=&amount=125&signature=35b1b788439a4b96961b9281e891ffbbfa89cdc9&product_id=&merchant_data=md-cb-opb&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298164239%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A59%3A33%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_test%22%3A+true%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298164239%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A59%3A33%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_**********%22%3A+true%7D%7C125%7Capprov%7CGEL%7Cmd-cb-opb%7C1549901%7Clf-var-1794146230471-cb-opb%7Capproved%7C08.11.2026+15%3A57%3A11%7C1029217131%7Copb%7Csuccess%7C0%7C125%7Cpurchase"
+    },
+    {
+      "name": "return/cb-opb#2",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T13:59:57.984+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=&masked_card=&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=125&actual_amount=125&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A57%3A11&actual_currency=GEL&order_id=lf-var-1794146230471-cb-opb&tran_type=purchase&eci=&settlement_date=&payment_system=opb&approval_code=approv&merchant_id=1549901&settlement_currency=&payment_id=1029217131&card_bin=&response_code=&card_type=&amount=125&signature=35b1b788439a4b96961b9281e891ffbbfa89cdc9&product_id=&merchant_data=md-cb-opb&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298164239%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A59%3A33%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_test%22%3A+true%7D&response_signature_string=**********%7C125%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298164239%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+15%3A59%3A33%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22masked_iban%22%3A+%22GE40XB************8712%22%2C+%22payer_iban%22%3A+%22GE40XB7392732837248712%22%2C+%22payer_name%22%3A+%22jon+doe%22%2C+%22is_**********%22%3A+true%7D%7C125%7Capprov%7CGEL%7Cmd-cb-opb%7C1549901%7Clf-var-1794146230471-cb-opb%7Capproved%7C08.11.2026+15%3A57%3A11%7C1029217131%7Copb%7Csuccess%7C0%7C125%7Cpurchase"
+    },
+    {
+      "name": "cb/cb-inst",
+      "channel": "server_callback_url",
+      "received_utc": "2026-11-08T14:00:14.379+00:00",
+      "method": "POST",
+      "content_type": "application/json; charset=UTF-8",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; Twisted) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36",
+      "source_ip": "3.75.125.89",
+      "encoding": "json",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "{\"rrn\": \"\", \"masked_card\": \"\", \"sender_cell_phone\": \"\", \"sender_account\": \"\", \"currency\": \"GEL\", \"fee\": \"\", \"reversal_amount\": \"0\", \"settlement_amount\": \"10000\", \"actual_amount\": \"10000\", \"response_description\": \"\", \"sender_email\": \"\", \"order_status\": \"approved\", \"response_status\": \"success\", \"order_time\": \"08.11.2026 15:57:12\", \"actual_currency\": \"GEL\", \"order_id\": \"lf-var-1794146231784-cb-inst\", \"tran_type\": \"purchase\", \"eci\": \"\", \"settlement_date\": \"\", \"payment_system\": \"installments\", \"approval_code\": \"approv\", \"merchant_id\": 1549901, \"settlement_currency\": \"\", \"payment_id\": 1029217139, \"card_bin\": \"\", \"response_code\": \"\", \"card_type\": \"\", \"amount\": \"10000\", \"signature\": \"7f74ac40f57064d0a5a326c0c4d881fc8771327a\", \"product_id\": \"\", \"merchant_data\": \"md-cb-inst\", \"rectoken\": \"\", \"rectoken_lifetime\": \"\", \"verification_status\": \"\", \"parent_order_id\": \"\", \"additional_info\": \"{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298165026, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": null, \\\"bank_country\\\": null, \\\"card_type\\\": null, \\\"card_product\\\": null, \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 16:00:13\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"X\\\", \\\"is_test\\\": true}\", \"response_signature_string\": \"**********|10000|GEL|{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298165026, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": null, \\\"bank_country\\\": null, \\\"card_type\\\": null, \\\"card_product\\\": null, \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 16:00:13\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"X\\\", \\\"is_**********\\\": true}|10000|approv|GEL|md-cb-inst|1549901|lf-var-1794146231784-cb-inst|approved|08.11.2026 15:57:12|1029217139|installments|success|0|10000|purchase\"}"
+    },
+    {
+      "name": "cb/cb-inst-fail",
+      "channel": "server_callback_url",
+      "received_utc": "2026-11-08T14:01:09.540+00:00",
+      "method": "POST",
+      "content_type": "application/json; charset=UTF-8",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; Twisted) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36",
+      "source_ip": "3.75.125.89",
+      "encoding": "json",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "processing",
+      "body": "{\"rrn\": \"\", \"masked_card\": \"\", \"sender_cell_phone\": \"\", \"sender_account\": \"\", \"currency\": \"GEL\", \"fee\": \"\", \"reversal_amount\": \"0\", \"settlement_amount\": \"0\", \"actual_amount\": \"\", \"response_description\": \"General decline\", \"sender_email\": \"\", \"order_status\": \"processing\", \"response_status\": \"success\", \"order_time\": \"08.11.2026 15:57:14\", \"actual_currency\": \"\", \"order_id\": \"lf-var-1794146232969-cb-inst-fail\", \"tran_type\": \"purchase\", \"eci\": \"\", \"settlement_date\": \"\", \"payment_system\": \"installments\", \"approval_code\": \"\", \"merchant_id\": 1549901, \"settlement_currency\": \"\", \"payment_id\": 1029217146, \"card_bin\": \"\", \"response_code\": 1000, \"card_type\": \"\", \"amount\": \"5000\", \"signature\": \"cc5d47ad8eb66aeafdd3f07b56233338e61946f0\", \"product_id\": \"\", \"merchant_data\": \"md-cb-inst-fail\", \"rectoken\": \"\", \"rectoken_lifetime\": \"\", \"verification_status\": \"\", \"parent_order_id\": \"\", \"additional_info\": \"{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": null, \\\"bank_response_code\\\": \\\"Statuses.FAILED\\\", \\\"bank_response_description\\\": \\\"0\\\", \\\"client_fee\\\": null, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": null, \\\"bank_country\\\": null, \\\"card_type\\\": null, \\\"card_product\\\": null, \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 16:01:09\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"BNPL\\\"}\", \"response_signature_string\": \"**********|{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": null, \\\"bank_response_code\\\": \\\"Statuses.FAILED\\\", \\\"bank_response_description\\\": \\\"0\\\", \\\"client_fee\\\": null, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": null, \\\"bank_country\\\": null, \\\"card_type\\\": null, \\\"card_product\\\": null, \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 16:01:09\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"BNPL\\\"}|5000|GEL|md-cb-inst-fail|1549901|lf-var-1794146232969-cb-inst-fail|processing|08.11.2026 15:57:14|1029217146|installments|1000|General decline|success|0|0|purchase\"}"
+    },
+    {
+      "name": "cb/cb-rec#2",
+      "channel": "server_callback_url",
+      "received_utc": "2026-11-08T14:02:04.572+00:00",
+      "method": "POST",
+      "content_type": "application/json; charset=UTF-8",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; Twisted) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36",
+      "source_ip": "3.75.125.89",
+      "encoding": "json",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "reversed",
+      "body": "{\"rrn\": \"1794146268\", \"masked_card\": \"444455XXXXXX1111\", \"sender_cell_phone\": \"\", \"sender_account\": \"\", \"currency\": \"GEL\", \"fee\": \"\", \"reversal_amount\": \"125\", \"settlement_amount\": \"0\", \"actual_amount\": \"125\", \"response_description\": \"\", \"sender_email\": \"\", \"order_status\": \"reversed\", \"response_status\": \"success\", \"order_time\": \"08.11.2026 15:57:10\", \"actual_currency\": \"GEL\", \"order_id\": \"lf-var-1794146230207-cb-rec\", \"tran_type\": \"purchase\", \"eci\": \"\", \"settlement_date\": \"\", \"payment_system\": \"card\", \"approval_code\": \"565656\", \"merchant_id\": 1549901, \"settlement_currency\": \"\", \"payment_id\": 1029217126, \"card_bin\": 444455, \"response_code\": \"\", \"card_type\": \"VISA\", \"amount\": \"125\", \"signature\": \"c509f6e9fa26e44fa1fffc9abce693ffb65402cd\", \"product_id\": \"\", \"merchant_data\": \"md-cb-rec\", \"rectoken\": \"I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG\", \"rectoken_lifetime\": \"\", \"verification_status\": \"\", \"parent_order_id\": \"\", \"additional_info\": \"{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298165883, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": \\\"TBC BANK\\\", \\\"bank_country\\\": \\\"GE\\\", \\\"card_type\\\": \\\"VISA\\\", \\\"card_product\\\": \\\"empty_visa\\\", \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 15:57:48\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"card\\\", \\\"version_3ds\\\": 2, \\\"is_test\\\": true, \\\"schemeid\\\": \\\"mBS8MDuWOpyhdw8aveS\\\"}\", \"response_signature_string\": \"**********|125|GEL|{\\\"capture_status\\\": null, \\\"capture_amount\\\": null, \\\"reservation_data\\\": \\\"{}\\\", \\\"transaction_id\\\": 2298165883, \\\"bank_response_code\\\": null, \\\"bank_response_description\\\": null, \\\"client_fee\\\": 0.0, \\\"settlement_fee\\\": 0.0, \\\"bank_name\\\": \\\"TBC BANK\\\", \\\"bank_country\\\": \\\"GE\\\", \\\"card_type\\\": \\\"VISA\\\", \\\"card_product\\\": \\\"empty_visa\\\", \\\"card_category\\\": null, \\\"timeend\\\": \\\"08.11.2026 15:57:48\\\", \\\"ipaddress_v4\\\": \\\"203.0.113.10\\\", \\\"payment_method\\\": \\\"card\\\", \\\"version_3ds\\\": 2, \\\"is_**********\\\": true, \\\"schemeid\\\": \\\"mBS8MDuWOpyhdw8aveS\\\"}|125|565656|444455|VISA|GEL|444455XXXXXX1111|md-cb-rec|1549901|lf-var-1794146230207-cb-rec|reversed|08.11.2026 15:57:10|1029217126|card|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG|success|125|1794146268|0|purchase\"}"
+    },
+    {
+      "name": "return/cb-inst",
+      "channel": "response_url",
+      "received_utc": "2026-11-08T14:03:00.476+00:00",
+      "method": "POST",
+      "content_type": "application/x-www-form-urlencoded",
+      "user_agent": "(payer's browser)",
+      "source_ip": "(payer's browser)",
+      "encoding": "form",
+      "root": "flat",
+      "signed_with": "test",
+      "scrubbed": true,
+      "order_status": "approved",
+      "body": "rrn=&masked_card=&sender_cell_phone=&sender_account=&currency=GEL&fee=&reversal_amount=0&settlement_amount=10000&actual_amount=10000&response_description=&sender_email=&order_status=approved&response_status=success&order_time=08.11.2026+15%3A57%3A12&actual_currency=GEL&order_id=lf-var-1794146231784-cb-inst&tran_type=purchase&eci=&settlement_date=&payment_system=installments&approval_code=approv&merchant_id=1549901&settlement_currency=&payment_id=1029217139&card_bin=&response_code=&card_type=&amount=10000&signature=7f74ac40f57064d0a5a326c0c4d881fc8771327a&product_id=&merchant_data=md-cb-inst&rectoken=&rectoken_lifetime=&verification_status=&parent_order_id=&additional_info=%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298165026%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+16%3A00%3A13%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22is_test%22%3A+true%7D&response_signature_string=**********%7C10000%7CGEL%7C%7B%22capture_status%22%3A+null%2C+%22capture_amount%22%3A+null%2C+%22reservation_data%22%3A+%22%7B%7D%22%2C+%22transaction_id%22%3A+2298165026%2C+%22bank_response_code%22%3A+null%2C+%22bank_response_description%22%3A+null%2C+%22client_fee%22%3A+0.0%2C+%22settlement_fee%22%3A+0.0%2C+%22bank_name%22%3A+null%2C+%22bank_country%22%3A+null%2C+%22card_type%22%3A+null%2C+%22card_product%22%3A+null%2C+%22card_category%22%3A+null%2C+%22timeend%22%3A+%2208.11.2026+16%3A00%3A13%22%2C+%22ipaddress_v4%22%3A+%22203.0.113.10%22%2C+%22payment_method%22%3A+%22X%22%2C+%22is_**********%22%3A+true%7D%7C10000%7Capprov%7CGEL%7Cmd-cb-inst%7C1549901%7Clf-var-1794146231784-cb-inst%7Capproved%7C08.11.2026+15%3A57%3A12%7C1029217139%7Cinstallments%7Csuccess%7C0%7C10000%7Cpurchase"
+    }
+  ],
+  "api_responses": [
+    {
+      "name": "checkout/url rectoken unknown",
+      "path": "/api/checkout/url",
+      "request": {
+        "order_id": "lf-var-1794145162288-rec-bad",
+        "order_desc": "Checkout variant",
+        "amount": 125,
+        "currency": "GEL",
+        "merchant_data": "md-rec-bad",
+        "response_url": "http://127.0.0.1:8766/return/rec-bad",
+        "cancel_url": "http://127.0.0.1:8766/cancel/rec-bad",
+        "rectoken": "lfvarUnknownToken0000000000000000000",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "error_code": 1007,
+          "error_message": "Parameter `rectoken` is incorrect",
+          "request_id": "gH0T7GxdD4GrO",
+          "response_status": "failure"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": false
+    },
+    {
+      "name": "checkout/url with rectoken",
+      "path": "/api/checkout/url",
+      "request": {
+        "order_id": "lf-var-1794145310866-rec-same",
+        "order_desc": "Checkout variant",
+        "amount": 125,
+        "currency": "GEL",
+        "merchant_data": "md-rec-same",
+        "response_url": "http://127.0.0.1:8766/return/rec-same",
+        "cancel_url": "http://127.0.0.1:8766/cancel/rec-same",
+        "rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG",
+        "delayed": "N",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "checkout_url": "https://pay.flitt.com/merchants/6aa79957f6f8336b820e6c82b7634f0c/default/index.html?token=a121aacb6927b4a2228d5185edf8b174726a2fb7",
+          "payment_id": "1029212936",
+          "response_status": "success"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": false
+    },
+    {
+      "name": "checkout/url opb",
+      "path": "/api/checkout/url",
+      "request": {
+        "order_id": "lf-var-1794145062469-opb",
+        "order_desc": "Checkout variant",
+        "amount": 125,
+        "currency": "GEL",
+        "merchant_data": "md-opb",
+        "response_url": "http://127.0.0.1:8766/return/opb",
+        "cancel_url": "http://127.0.0.1:8766/cancel/opb",
+        "payment_systems": "opb",
+        "payment_method": "x",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "checkout_url": "https://pay.flitt.com/merchants/6aa79957f6f8336b820e6c82b7634f0c/default/index.html?token=947d5cfb4dd70874174455973d53085bff732b34",
+          "payment_id": "1029211748",
+          "response_status": "success"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": false
+    },
+    {
+      "name": "checkout/url installments",
+      "path": "/api/checkout/url",
+      "request": {
+        "order_id": "lf-var-1794145771046-inst-100",
+        "order_desc": "Checkout variant",
+        "amount": 10000,
+        "currency": "GEL",
+        "merchant_data": "md-inst-100",
+        "response_url": "http://127.0.0.1:8766/return/inst-100",
+        "cancel_url": "http://127.0.0.1:8766/cancel/inst-100",
+        "payment_systems": "installments",
+        "payment_method": "x",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "checkout_url": "https://pay.flitt.com/merchants/6aa79957f6f8336b820e6c82b7634f0c/default/index.html?token=5a1c172764c5ec2ede2d55ead9ab275376bdf965",
+          "payment_id": "1029215027",
+          "response_status": "success"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": false
+    },
+    {
+      "name": "reverse opb (refused)",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794145062469-opb",
+        "amount": 125,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-opb-3",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "error_code": 1000,
+          "error_message": "General decline",
+          "request_id": "aaWHqVpvnbOA7",
+          "response_status": "failure"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": false
+    },
+    {
+      "name": "reverse installments partial (declined)",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794145771046-inst-100",
+        "amount": 2500,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-inst-1",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "reverse_status": "declined",
+          "order_id": "lf-var-1794145771046-inst-100",
+          "response_description": "General decline",
+          "response_code": "1000",
+          "merchant_id": 1549901,
+          "response_status": "success",
+          "signature": "955df34fd0328a1b3721ca51ff6ba6bdcf06bf80",
+          "reverse_id": "lf-var-rev-inst-1",
+          "reversal_amount": "0",
+          "transaction_id": "2298161153",
+          "comment": "variant test",
+          "response_signature_string": "**********|variant **********|1549901|lf-var-1794145771046-inst-100|1000|General decline|success|0|lf-var-rev-inst-1|declined|2298161153"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": true
+    },
+    {
+      "name": "reverse installments full (declined)",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794145771046-inst-100",
+        "amount": 10000,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-inst-2",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "reverse_status": "declined",
+          "order_id": "lf-var-1794145771046-inst-100",
+          "response_description": "General decline",
+          "response_code": "1000",
+          "merchant_id": 1549901,
+          "response_status": "success",
+          "signature": "e499d37d7a072c6255feeeac5e280e651db04eed",
+          "reverse_id": "lf-var-rev-inst-2",
+          "reversal_amount": "0",
+          "transaction_id": "2298161157",
+          "comment": "variant test",
+          "response_signature_string": "**********|variant **********|1549901|lf-var-1794145771046-inst-100|1000|General decline|success|0|lf-var-rev-inst-2|declined|2298161157"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": true
+    },
+    {
+      "name": "reverse card control (approved)",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794145355397-ctl-no3ds",
+        "amount": 125,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-ctl-1",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "reverse_status": "approved",
+          "order_id": "lf-var-1794145355397-ctl-no3ds",
+          "response_description": "",
+          "response_code": "",
+          "merchant_id": 1549901,
+          "response_status": "success",
+          "signature": "c02f4add38a0cb9473c860a4d6208ac4f6e7f5e7",
+          "reverse_id": "lf-var-rev-ctl-1",
+          "reversal_amount": "125",
+          "transaction_id": "2298159421",
+          "comment": "variant test",
+          "response_signature_string": "**********|variant **********|1549901|lf-var-1794145355397-ctl-no3ds|success|125|lf-var-rev-ctl-1|approved|2298159421"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": true
+    },
+    {
+      "name": "status opb",
+      "path": "/api/status/order_id",
+      "request": {
+        "order_id": "lf-var-1794145062469-opb",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "rrn": "",
+          "masked_card": "",
+          "sender_cell_phone": "",
+          "sender_account": "",
+          "currency": "GEL",
+          "fee": "",
+          "reversal_amount": "0",
+          "settlement_amount": "125",
+          "actual_amount": "125",
+          "response_description": "",
+          "sender_email": "",
+          "order_status": "approved",
+          "response_status": "success",
+          "order_time": "08.11.2026 15:37:43",
+          "actual_currency": "GEL",
+          "order_id": "lf-var-1794145062469-opb",
+          "tran_type": "purchase",
+          "eci": "",
+          "settlement_date": "",
+          "payment_system": "opb",
+          "approval_code": "approv",
+          "merchant_id": 1549901,
+          "settlement_currency": "",
+          "payment_id": 1029211748,
+          "card_bin": "",
+          "response_code": "",
+          "card_type": "",
+          "amount": "125",
+          "signature": "2832dad85edb3e31c71acd647964b2fbe9c34c78",
+          "product_id": "",
+          "merchant_data": "md-opb",
+          "rectoken": "",
+          "rectoken_lifetime": "",
+          "verification_status": "",
+          "parent_order_id": "",
+          "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": 2298158510, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": \"08.11.2026 15:45:14\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"X\", \"masked_iban\": \"GE40XB************8712\", \"payer_iban\": \"GE40XB7392732837248712\", \"payer_name\": \"jon doe\", \"is_test\": true}",
+          "fee_oplata": "0",
+          "response_signature_string": "**********|125|GEL|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": 2298158510, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": \"08.11.2026 15:45:14\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"X\", \"masked_iban\": \"GE40XB************8712\", \"payer_iban\": \"GE40XB7392732837248712\", \"payer_name\": \"jon doe\", \"is_**********\": true}|125|approv|GEL|0|md-opb|1549901|lf-var-1794145062469-opb|approved|08.11.2026 15:37:43|1029211748|opb|success|0|125|purchase"
+        }
+      },
+      "scrubbed": true,
+      "response_signed": true
+    },
+    {
+      "name": "status inst",
+      "path": "/api/status/order_id",
+      "request": {
+        "order_id": "lf-var-1794145064802-inst",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "rrn": "",
+          "masked_card": "",
+          "sender_cell_phone": "",
+          "sender_account": "",
+          "currency": "GEL",
+          "fee": "",
+          "reversal_amount": "0",
+          "settlement_amount": "0",
+          "actual_amount": "",
+          "response_description": "General decline",
+          "sender_email": "",
+          "order_status": "processing",
+          "response_status": "success",
+          "order_time": "08.11.2026 15:37:46",
+          "actual_currency": "",
+          "order_id": "lf-var-1794145064802-inst",
+          "tran_type": "purchase",
+          "eci": "",
+          "settlement_date": "",
+          "payment_system": "installments",
+          "approval_code": "",
+          "merchant_id": 1549901,
+          "settlement_currency": "",
+          "payment_id": 1029211759,
+          "card_bin": "",
+          "response_code": 1000,
+          "card_type": "",
+          "amount": "5000",
+          "signature": "6c64102de6e01044c78a04c01fbb587621b7e893",
+          "product_id": "",
+          "merchant_data": "md-inst",
+          "rectoken": "",
+          "rectoken_lifetime": "",
+          "verification_status": "",
+          "parent_order_id": "",
+          "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": \"Statuses.FAILED\", \"bank_response_description\": \"0\", \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": \"08.11.2026 15:48:03\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"BNPL\"}",
+          "fee_oplata": "0",
+          "response_signature_string": "**********|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": \"Statuses.FAILED\", \"bank_response_description\": \"0\", \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": \"08.11.2026 15:48:03\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"BNPL\"}|5000|GEL|0|md-inst|1549901|lf-var-1794145064802-inst|processing|08.11.2026 15:37:46|1029211759|installments|1000|General decline|success|0|0|purchase"
+        }
+      },
+      "scrubbed": true,
+      "response_signed": true
+    },
+    {
+      "name": "status inst-low",
+      "path": "/api/status/order_id",
+      "request": {
+        "order_id": "lf-var-1794145065996-inst-low",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "rrn": "",
+          "masked_card": "",
+          "sender_cell_phone": "",
+          "sender_account": "",
+          "currency": "GEL",
+          "fee": "",
+          "reversal_amount": "0",
+          "settlement_amount": "0",
+          "actual_amount": "",
+          "response_description": "",
+          "sender_email": "",
+          "order_status": "processing",
+          "response_status": "success",
+          "order_time": "08.11.2026 15:37:47",
+          "actual_currency": "",
+          "order_id": "lf-var-1794145065996-inst-low",
+          "tran_type": "purchase",
+          "eci": "",
+          "settlement_date": "",
+          "payment_system": "installments",
+          "approval_code": "",
+          "merchant_id": 1549901,
+          "settlement_currency": "",
+          "payment_id": 1029211769,
+          "card_bin": "",
+          "response_code": "",
+          "card_type": "",
+          "amount": "4999",
+          "signature": "4fec915dfc3a6783ba647eb156863bd9d9241746",
+          "product_id": "",
+          "merchant_data": "md-inst-low",
+          "rectoken": "",
+          "rectoken_lifetime": "",
+          "verification_status": "",
+          "parent_order_id": "",
+          "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"BNPL\"}",
+          "fee_oplata": "0",
+          "response_signature_string": "**********|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"BNPL\"}|4999|GEL|0|md-inst-low|1549901|lf-var-1794145065996-inst-low|processing|08.11.2026 15:37:47|1029211769|installments|success|0|0|purchase"
+        }
+      },
+      "scrubbed": true,
+      "response_signed": true
+    },
+    {
+      "name": "status inst-100",
+      "path": "/api/status/order_id",
+      "request": {
+        "order_id": "lf-var-1794145771046-inst-100",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "rrn": "",
+          "masked_card": "",
+          "sender_cell_phone": "",
+          "sender_account": "",
+          "currency": "GEL",
+          "fee": "",
+          "reversal_amount": "0",
+          "settlement_amount": "10000",
+          "actual_amount": "10000",
+          "response_description": "",
+          "sender_email": "",
+          "order_status": "approved",
+          "response_status": "success",
+          "order_time": "08.11.2026 15:49:31",
+          "actual_currency": "GEL",
+          "order_id": "lf-var-1794145771046-inst-100",
+          "tran_type": "purchase",
+          "eci": "",
+          "settlement_date": "",
+          "payment_system": "installments",
+          "approval_code": "approv",
+          "merchant_id": 1549901,
+          "settlement_currency": "",
+          "payment_id": 1029215027,
+          "card_bin": "",
+          "response_code": "",
+          "card_type": "",
+          "amount": "10000",
+          "signature": "28d4ad02f01e6b1c9f9ea4bf36e188f64089c694",
+          "product_id": "",
+          "merchant_data": "md-inst-100",
+          "rectoken": "",
+          "rectoken_lifetime": "",
+          "verification_status": "",
+          "parent_order_id": "",
+          "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": 2298160912, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": \"08.11.2026 15:49:57\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"X\", \"is_test\": true}",
+          "fee_oplata": "0",
+          "response_signature_string": "**********|10000|GEL|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": 2298160912, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": \"08.11.2026 15:49:57\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"X\", \"is_**********\": true}|10000|approv|GEL|0|md-inst-100|1549901|lf-var-1794145771046-inst-100|approved|08.11.2026 15:49:31|1029215027|installments|success|0|10000|purchase"
+        }
+      },
+      "scrubbed": true,
+      "response_signed": true
+    },
+    {
+      "name": "status rec-same",
+      "path": "/api/status/order_id",
+      "request": {
+        "order_id": "lf-var-1794145310866-rec-same",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "rrn": "1794145345",
+          "masked_card": "444455XXXXXX6666",
+          "sender_cell_phone": "",
+          "sender_account": "",
+          "currency": "GEL",
+          "fee": "",
+          "reversal_amount": "0",
+          "settlement_amount": "125",
+          "actual_amount": "125",
+          "response_description": "",
+          "sender_email": "",
+          "order_status": "approved",
+          "response_status": "success",
+          "order_time": "08.11.2026 15:41:51",
+          "actual_currency": "GEL",
+          "order_id": "lf-var-1794145310866-rec-same",
+          "tran_type": "purchase",
+          "eci": "",
+          "settlement_date": "",
+          "payment_system": "card",
+          "approval_code": "565656",
+          "merchant_id": 1549901,
+          "settlement_currency": "",
+          "payment_id": 1029212936,
+          "card_bin": 444455,
+          "response_code": "",
+          "card_type": "VISA",
+          "amount": "125",
+          "signature": "551a0fc5eeea800f2d182ae1da39d488b63108d5",
+          "product_id": "",
+          "merchant_data": "md-rec-same",
+          "rectoken": "I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG",
+          "rectoken_lifetime": "",
+          "verification_status": "",
+          "parent_order_id": "",
+          "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": 2298158043, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 15:42:25\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"version_3ds\": 2, \"is_test\": true, \"schemeid\": \"mBS8MDuWOpyhdw8aveS\", \"acq_tran_id\": \"led7aKNWry9r7LO\"}",
+          "fee_oplata": "0",
+          "response_signature_string": "**********|125|GEL|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": 2298158043, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": 0.0, \"settlement_fee\": 0.0, \"bank_name\": \"TBC BANK\", \"bank_country\": \"GE\", \"card_type\": \"VISA\", \"card_product\": \"empty_visa\", \"card_category\": null, \"timeend\": \"08.11.2026 15:42:25\", \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": \"card\", \"version_3ds\": 2, \"is_**********\": true, \"schemeid\": \"mBS8MDuWOpyhdw8aveS\", \"acq_tran_id\": \"led7aKNWry9r7LO\"}|125|565656|444455|VISA|GEL|0|444455XXXXXX6666|md-rec-same|1549901|lf-var-1794145310866-rec-same|approved|08.11.2026 15:41:51|1029212936|card|I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG|success|0|1794145345|125|purchase"
+        }
+      },
+      "scrubbed": true,
+      "response_signed": true
+    },
+    {
+      "name": "status opb-picker",
+      "path": "/api/status/order_id",
+      "request": {
+        "order_id": "lf-var-1794145063655-opb-picker",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "rrn": "",
+          "masked_card": "",
+          "sender_cell_phone": "",
+          "sender_account": "",
+          "currency": "GEL",
+          "fee": "",
+          "reversal_amount": "0",
+          "settlement_amount": "0",
+          "actual_amount": "",
+          "response_description": "",
+          "sender_email": "",
+          "order_status": "created",
+          "response_status": "success",
+          "order_time": "08.11.2026 15:37:44",
+          "actual_currency": "",
+          "order_id": "lf-var-1794145063655-opb-picker",
+          "tran_type": "purchase",
+          "eci": "",
+          "settlement_date": "",
+          "payment_system": "",
+          "approval_code": "",
+          "merchant_id": 1549901,
+          "settlement_currency": "",
+          "payment_id": 1029211753,
+          "card_bin": "",
+          "response_code": "",
+          "card_type": "",
+          "amount": "125",
+          "signature": "1ced358990faf159b73107f8e11e2ee613c4706a",
+          "product_id": "",
+          "merchant_data": "md-opb-picker",
+          "rectoken": "",
+          "rectoken_lifetime": "",
+          "verification_status": "",
+          "parent_order_id": "",
+          "additional_info": "{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": null}",
+          "fee_oplata": "0",
+          "response_signature_string": "**********|{\"capture_status\": null, \"capture_amount\": null, \"reservation_data\": \"{}\", \"transaction_id\": null, \"bank_response_code\": null, \"bank_response_description\": null, \"client_fee\": null, \"settlement_fee\": 0.0, \"bank_name\": null, \"bank_country\": null, \"card_type\": null, \"card_product\": null, \"card_category\": null, \"timeend\": null, \"ipaddress_v4\": \"203.0.113.10\", \"payment_method\": null}|125|GEL|0|md-opb-picker|1549901|lf-var-1794145063655-opb-picker|created|08.11.2026 15:37:44|1029211753|success|0|0|purchase"
+        }
+      },
+      "scrubbed": true,
+      "response_signed": true
+    },
+    {
+      "name": "reverse opb with callback url (refused, no callback)",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794146230471-cb-opb",
+        "amount": 125,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-cbopb-1",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "error_code": 1000,
+          "error_message": "General decline",
+          "request_id": "ZYLDbJSPruYif",
+          "response_status": "failure"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": false
+    },
+    {
+      "name": "reverse installments with callback url (declined, no callback)",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794146231784-cb-inst",
+        "amount": 10000,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-cbinst-1",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "reverse_status": "declined",
+          "order_id": "lf-var-1794146231784-cb-inst",
+          "response_description": "General decline",
+          "response_code": "1000",
+          "merchant_id": 1549901,
+          "response_status": "success",
+          "signature": "3ab88d4c1677f71b698179e0116bef4753ffb093",
+          "reverse_id": "lf-var-rev-cbinst-1",
+          "reversal_amount": "0",
+          "transaction_id": "2298165880",
+          "comment": "variant test",
+          "response_signature_string": "**********|variant **********|1549901|lf-var-1794146231784-cb-inst|1000|General decline|success|0|lf-var-rev-cbinst-1|declined|2298165880"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": true
+    },
+    {
+      "name": "reverse rectoken checkout order (approved, callback 'reversed')",
+      "path": "/api/reverse/order_id",
+      "request": {
+        "order_id": "lf-var-1794146230207-cb-rec",
+        "amount": 125,
+        "currency": "GEL",
+        "reverse_id": "lf-var-rev-cbrec-1",
+        "comment": "variant test",
+        "merchant_id": 1549901,
+        "version": "1.0.1"
+      },
+      "response": {
+        "response": {
+          "reverse_status": "approved",
+          "order_id": "lf-var-1794146230207-cb-rec",
+          "response_description": "",
+          "response_code": "",
+          "merchant_id": 1549901,
+          "response_status": "success",
+          "signature": "6c54bbcd9054a0a05cc2c57e53d6932db567c3cf",
+          "reverse_id": "lf-var-rev-cbrec-1",
+          "reversal_amount": "125",
+          "transaction_id": "2298165883",
+          "comment": "variant test",
+          "response_signature_string": "**********|variant **********|1549901|lf-var-1794146230207-cb-rec|success|125|lf-var-rev-cbrec-1|approved|2298165883"
+        }
+      },
+      "scrubbed": false,
+      "response_signed": true
+    }
+  ]
+}

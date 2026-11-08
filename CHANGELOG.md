@@ -18,3 +18,8 @@ All notable changes to `class-atlas/laravel-flitt` are listed here. The format f
   `UnknownMerchantException`, `MissingCredentialsException` and `InvalidParameterException`, all extending
   `FlittException`.
 - One log line per call when `FLITT_LOG_REQUESTS` is on, without bodies, keys, signatures or personal data.
+- `Responses\Order` and `Responses\AdditionalInfo`: Flitt's order fields in camelCase, amounts as integers in minor
+  units (major-unit decimals converted exactly), dates as `CarbonImmutable` in Europe/Kyiv, and `raw` with everything
+  Flitt sent.
+- The enums `OrderStatus`, `TranType`, `CaptureStatus`, `ReverseStatus`, `Currency`, `Lang`, `PaymentSystem` and
+  `PaymentMethod`. A value this version does not know reads as `null` and never breaks parsing.
