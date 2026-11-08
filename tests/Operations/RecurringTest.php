@@ -17,7 +17,6 @@ use ClassAtlas\Flitt\Tests\Support\Live;
 use ClassAtlas\Flitt\Tests\Support\ProbeCalls;
 use ClassAtlas\Flitt\Tests\Support\Samples;
 use Illuminate\Support\Facades\Route;
-use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
@@ -59,7 +58,7 @@ it('charges a saved card and checks Flitt\'s signed answer', function () {
         'order_id' => 'inv-1043', 'merchant_id' => 1549901, 'order_status' => 'approved', 'tran_type' => 'purchase',
         'amount' => '12500', 'currency' => 'GEL', 'rectoken' => Live::TEST_RECTOKEN, 'response_status' => 'success',
     ]);
-    $mockClient = MockClient::global([RecurringRequest::class => MockResponse::make(['response' => $answer])]);
+    $mockClient = Flitt::fake([RecurringRequest::class => MockResponse::make(['response' => $answer])])->mockClient();
 
     $order = Flitt::recurring('inv-1043', 12_500, Currency::GEL, 'Tuition, December', Live::TEST_RECTOKEN)->charge();
     $sent = $mockClient->getLastPendingRequest()?->body()?->all()['request'];
@@ -74,7 +73,7 @@ it('charges a saved card and checks Flitt\'s signed answer', function () {
 });
 
 it('passes Flitt\'s "token not found" on as ApiErrorException', function () {
-    MockClient::global([RecurringRequest::class => MockResponse::make(['response' => [
+    Flitt::fake([RecurringRequest::class => MockResponse::make(['response' => [
         'error_code' => 1035, 'error_message' => 'Token not found', 'request_id' => 'r1', 'response_status' => 'failure',
     ]])]);
 
@@ -82,7 +81,7 @@ it('passes Flitt\'s "token not found" on as ApiErrorException', function () {
 })->throws(ApiErrorException::class, 'error 1035');
 
 it('refuses an empty card token or a "|" in it before anything is sent', function (string $rectoken) {
-    $mockClient = MockClient::global([RecurringRequest::class => MockResponse::make(['response' => []])]);
+    $mockClient = Flitt::fake([RecurringRequest::class => MockResponse::make(['response' => []])])->mockClient();
 
     expect(fn () => Flitt::recurring('inv-1043', 12_500, Currency::GEL, 'Tuition', $rectoken)->charge())
         ->toThrow(InvalidParameterException::class, 'rectoken');

@@ -15,6 +15,7 @@ use ClassAtlas\Flitt\Responses\Order;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
 use Psr\Log\LoggerInterface;
+use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Response;
 use SensitiveParameter;
 
@@ -30,6 +31,7 @@ final readonly class Flitt
         private Repository $config,
         private LogManager $log,
         private ?Credentials $credentials = null,
+        private ?MockClient $mockClient = null,
     ) {}
 
     /**
@@ -78,7 +80,7 @@ final readonly class Flitt
      */
     public function withCredentials(Credentials $credentials): self
     {
-        return new self($this->config, $this->log, $credentials);
+        return new self($this->config, $this->log, $credentials, $this->mockClient);
     }
 
     /**
@@ -105,6 +107,22 @@ final readonly class Flitt
     }
 
     /**
+     * @internal A client whose calls are answered by this MockClient and never leave the app. Use Flitt::fake().
+     */
+    public function faked(MockClient $mockClient): self
+    {
+        return new self($this->config, $this->log, $this->credentials, $mockClient);
+    }
+
+    /**
+     * @internal
+     */
+    public function mockClient(): ?MockClient
+    {
+        return $this->mockClient;
+    }
+
+    /**
      * @internal Sends a request with this client's credentials.
      */
     public function send(FlittRequest $request): Response
@@ -119,12 +137,14 @@ final readonly class Flitt
      */
     public function connector(): FlittConnector
     {
-        return new FlittConnector(
+        $connector = new FlittConnector(
             credentials: $this->credentials(),
             timeout: $this->integerSetting('flitt.timeout', 10),
             connectTimeout: $this->integerSetting('flitt.connect_timeout', 3),
             logger: $this->logger(),
         );
+
+        return $this->mockClient === null ? $connector : $connector->withMockClient($this->mockClient);
     }
 
     private function logger(): ?LoggerInterface

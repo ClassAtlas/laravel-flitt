@@ -32,6 +32,9 @@ All notable changes to `class-atlas/laravel-flitt` are listed here. The format f
   `->order()`.
 - `Callbacks\CallbackVerifier::verify($body, $contentType)` for bodies processed later. Payout callbacks are checked
   with the credit key; protocol 2.0 bodies are read too.
+- `Flitt::fake()`, with a default answer for every operation, prepared answers per request class, and
+  `Flitt::assertSent()`, `assertNotSent()` and `assertNothingSent()`. `Testing\FakeOrder` builds orders, and
+  `Testing\FakeCallback::for($order)->signedWith($key)` correctly signed callback and return bodies.
 - The Saloon requests `CheckoutUrlRequest`, `CheckoutTokenRequest`, `OrderStatusRequest` and `RecurringRequest`.
 - The enums `OrderStatus`, `TranType`, `CaptureStatus`, `ReverseStatus`, `Currency`, `Lang`, `PaymentSystem` and
   `PaymentMethod`. A value this version does not know reads as `null` and never breaks parsing.

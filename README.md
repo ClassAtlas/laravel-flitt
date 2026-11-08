@@ -11,6 +11,7 @@ name here can be looked up in [Flitt's documentation](https://docs.flitt.com).
 
 - Every request is signed and every signed answer is checked.
 - Credentials can change per call, for apps that hold several merchants.
+- `Flitt::fake()` lets your tests run without the network, including correctly signed callbacks.
 
 > **Not released yet.** The first beta is `1.0.0-beta.1`. This README covers what is built so far.
 
@@ -324,6 +325,65 @@ Flitt answers errors with HTTP 200 and an `error_code`; the package turns every 
 Off by default. With `FLITT_LOG_REQUESTS=true`, each call logs one line: the operation, merchant id, order id, HTTP
 status, Flitt's error code and the time taken. It never logs bodies, keys, signatures, card tokens, card numbers, emails
 or IP addresses.
+
+## Testing your app
+
+`Flitt::fake()` stops every call from leaving your app and answers with a sensible default (an approved order, a
+checkout URL and so on). Prepare an answer per request when you need a particular one:
+
+```php
+use ClassAtlas\Flitt\Facades\Flitt;
+use ClassAtlas\Flitt\Requests\OrderStatusRequest;
+use ClassAtlas\Flitt\Testing\FakeOrder;
+
+Flitt::fake([
+    OrderStatusRequest::class => FakeOrder::approved()->orderId('inv-1042')->amount(12_500),
+]);
+
+// ... run the code under test ...
+
+Flitt::assertSent(OrderStatusRequest::class, fn (array $params) => $params['order_id'] === 'inv-1042');
+Flitt::assertNotSent(RecurringRequest::class);
+Flitt::assertNothingSent();   // or: nothing at all left the app
+```
+
+`$params` holds what was sent, under Flitt's names (`order_id`, `amount`, `preauth` as `Y`/`N`, `merchant_id`), without
+the signature. A request with no prepared answer and no default throws, so nothing reaches Flitt by accident. The fake
+still uses your credentials, from `config/flitt.php` or `withCredentials()`, and signs its answers with them, so the
+package's signature checks run in your tests too.
+
+`FakeOrder` starts from `approved()`, `declined($code)`, `processing()`, `created()`, `expired()` or `reversed()`, and
+takes `orderId()`, `merchantId()`, `amount()`, `currency()`, `transactionId()`, `rectoken()`, `merchantData()` and
+`payout()`. Whatever you leave out is taken from the request it answers. A prepared answer can also be a Saloon
+`MockResponse`.
+
+**Testing your callback controller** needs a correctly signed body. `FakeCallback` signs one with the key you give it:
+
+```php
+use ClassAtlas\Flitt\Testing\FakeCallback;
+use ClassAtlas\Flitt\Testing\FakeOrder;
+
+$this->postJson(route('flitt.callback'), FakeCallback::for(
+    FakeOrder::approved()->orderId('inv-1042')->transactionId(2298105279),
+)->signedWith('test'))->assertOk();
+
+// A browser return is a form post
+$this->post(route('flitt.return'), FakeCallback::for(FakeOrder::declined(1097))->signedWith('test'))
+    ->assertRedirect();
+```
+
+**Saloon directly.** The package is built on [Saloon](https://docs.saloon.dev). If you already fake Saloon requests,
+the connector `ClassAtlas\Flitt\FlittConnector` and the request classes below work with `MockClient` as usual.
+
+| Operation          | Request class                                  |
+|--------------------|-------------------------------------------------|
+| Checkout URL       | `ClassAtlas\Flitt\Requests\CheckoutUrlRequest`     |
+| Checkout token     | `ClassAtlas\Flitt\Requests\CheckoutTokenRequest`   |
+| Order status       | `ClassAtlas\Flitt\Requests\OrderStatusRequest`     |
+| Recurring charge   | `ClassAtlas\Flitt\Requests\RecurringRequest`       |
+
+Flitt signs most answers, so a `MockResponse` for a signed operation needs a correct signature; `Flitt::fake()` makes
+one for you.
 
 ## Enums
 
