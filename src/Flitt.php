@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace ClassAtlas\Flitt;
 
+use ClassAtlas\Flitt\Builders\Checkout;
+use ClassAtlas\Flitt\Enums\Currency;
 use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
 use ClassAtlas\Flitt\Exceptions\MissingCredentialsException;
+use ClassAtlas\Flitt\Requests\FlittRequest;
+use ClassAtlas\Flitt\Requests\OrderStatusRequest;
+use ClassAtlas\Flitt\Responses\Order;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
 use Psr\Log\LoggerInterface;
+use Saloon\Http\Response;
 
 /**
  * The client: every Flitt operation starts here, usually through the Flitt facade.
@@ -23,6 +29,26 @@ final readonly class Flitt
         private LogManager $log,
         private ?Credentials $credentials = null,
     ) {}
+
+    /**
+     * A hosted checkout: finish it with url() or token().
+     *
+     * @param  int  $amount  in minor units: 12_500 is 125.00
+     */
+    public function checkout(string $orderId, int $amount, Currency $currency, string $orderDesc): Checkout
+    {
+        return new Checkout($this, $orderId, $amount, $currency, $orderDesc);
+    }
+
+    /**
+     * The order as Flitt has it now.
+     */
+    public function status(string $orderId): Order
+    {
+        $request = new OrderStatusRequest($orderId);
+
+        return $request->createDtoFromResponse($this->send($request));
+    }
 
     /**
      * A client that uses these credentials for every call made through it.
@@ -53,6 +79,14 @@ final readonly class Flitt
         }
 
         throw MissingCredentialsException::none();
+    }
+
+    /**
+     * @internal Sends a request with this client's credentials.
+     */
+    public function send(FlittRequest $request): Response
+    {
+        return $this->connector()->send($request);
     }
 
     /**

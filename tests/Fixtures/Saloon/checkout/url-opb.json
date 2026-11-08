@@ -1,0 +1,8 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Content-Type": "application\/json; charset=UTF-8"
+    },
+    "data": "{\"response\":{\"checkout_url\":\"https:\/\/pay.flitt.com\/merchants\/6aa79957f6f8336b820e6c82b7634f0c\/default\/index.html?token=6c424c41590a0b0b926e62d2f1a623eb2905faa1\",\"payment_id\":\"1029255281\",\"response_status\":\"success\"}}",
+    "context": []
+}
