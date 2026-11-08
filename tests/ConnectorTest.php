@@ -12,20 +12,13 @@ use ClassAtlas\Flitt\Logging\CallLog;
 use ClassAtlas\Flitt\Signing\Signer;
 use ClassAtlas\Flitt\Signing\SigningKey;
 use ClassAtlas\Flitt\Tests\Support\MemoryLogger;
+use ClassAtlas\Flitt\Tests\Support\ProbeCalls;
 use ClassAtlas\Flitt\Tests\Support\ProbeRequest;
 use GuzzleHttp\RequestOptions;
 use Monolog\Handler\TestHandler;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-
-function timedOut(): MockResponse
-{
-    return MockResponse::make()->throw(
-        static fn (PendingRequest $pendingRequest) => new FatalRequestException(new RuntimeException('cURL error 28'), $pendingRequest),
-    );
-}
 
 it('sends to pay.flitt.com with the timeouts it was given', function () {
     $pendingRequest = new FlittConnector(new Credentials(1549901, 'test'), timeout: 25, connectTimeout: 5)
@@ -57,7 +50,7 @@ it('never retries, and says to check the status when no answer came', function (
     $mockClient = new MockClient([ProbeRequest::class => function () use (&$attempts): MockResponse {
         $attempts++;
 
-        return timedOut();
+        return ProbeCalls::timedOut();
     }]);
 
     try {
@@ -126,7 +119,7 @@ it('logs one line per call, with nothing but the allowed fields', function (Mock
     'an answer' => [fn () => MockResponse::make(['response' => ['order_status' => 'approved']]), 'info', 200, null],
     'an error' => [fn () => MockResponse::make(['response' => ['error_code' => 1018, 'error_message' => 'Order not found']]), 'warning', 200, 1018],
     'an HTTP error' => [fn () => MockResponse::make('Not found', 404), 'warning', 404, null],
-    'no answer' => [fn () => timedOut(), 'warning', null, null],
+    'no answer' => [fn () => ProbeCalls::timedOut(), 'warning', null, null],
 ]);
 
 it('builds its connector from config, with logging off by default', function () {

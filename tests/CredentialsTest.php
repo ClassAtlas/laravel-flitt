@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 use ClassAtlas\Flitt\Credentials;
 use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
+use ClassAtlas\Flitt\Tests\Support\TestCredentials;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
-function credentialsWithKeys(): Credentials
-{
-    return new Credentials(merchantId: 1549901, paymentKey: 'payment-secret', creditKey: 'credit-secret');
-}
-
 it('hands the keys to the code that signs with them', function () {
-    expect(credentialsWithKeys())
+    expect(TestCredentials::withKeys())
         ->merchantId->toBe(1549901)
         ->paymentKey()->toBe('payment-secret')
         ->creditKey()->toBe('credit-secret')
@@ -21,7 +17,7 @@ it('hands the keys to the code that signs with them', function () {
 });
 
 it('keeps the keys out of every dump', function (string $dumper) {
-    $credentials = credentialsWithKeys();
+    $credentials = TestCredentials::withKeys();
 
     $output = match ($dumper) {
         'var_dump' => (static function () use ($credentials): string {
@@ -42,14 +38,14 @@ it('keeps the keys out of every dump', function (string $dumper) {
 })->with(['var_dump', 'print_r', 'var_export', 'dump() and dd()']);
 
 it('keeps the keys out of JSON, and so out of log context', function () {
-    expect(json_encode(credentialsWithKeys(), JSON_THROW_ON_ERROR))
+    expect(json_encode(TestCredentials::withKeys(), JSON_THROW_ON_ERROR))
         ->toBe('{"merchantId":1549901,"paymentKey":"********","creditKey":"********"}')
         ->and(json_encode(new Credentials(1549901, 'payment-secret'), JSON_THROW_ON_ERROR))
         ->toBe('{"merchantId":1549901,"paymentKey":"********","creditKey":null}');
 });
 
 it('refuses to be serialized, so the keys stay out of queues and caches', function () {
-    serialize(credentialsWithKeys());
+    serialize(TestCredentials::withKeys());
 })->throws(LogicException::class, 'Pass the merchant id instead');
 
 it('marks the keys as sensitive, so stack traces leave them out', function () {
