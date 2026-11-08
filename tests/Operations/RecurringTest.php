@@ -19,6 +19,8 @@ use ClassAtlas\Flitt\Tests\Support\Samples;
 use Illuminate\Support\Facades\Route;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 beforeEach(function () {
     config(['flitt.merchant_id' => '1549901', 'flitt.payment_key' => 'test']);
@@ -87,6 +89,14 @@ it('refuses an empty card token or a "|" in it before anything is sent', functio
 
     $mockClient->assertNothingSent();
 })->with(['', 'abc|def']);
+
+it('keeps the card token out of dumps', function () {
+    $recurring = Flitt::recurring('inv-1043', 12_500, Currency::GEL, 'Tuition', Live::TEST_RECTOKEN);
+
+    expect(new CliDumper()->dump(new VarCloner()->cloneVar($recurring), true))
+        ->not->toContain(Live::TEST_RECTOKEN)
+        ->and(print_r($recurring, true))->not->toContain(Live::TEST_RECTOKEN)->toContain('[rectoken] => ********');
+});
 
 it('keeps the card token out of stack traces', function () {
     $parameter = new ReflectionMethod(ClassAtlas\Flitt\Flitt::class, 'recurring')->getParameters()[4];

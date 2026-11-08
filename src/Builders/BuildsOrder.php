@@ -73,6 +73,22 @@ trait BuildsOrder
     }
 
     /**
+     * A builder dumps as the parameters it will send, with a card token masked, instead of the whole client behind it.
+     *
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        $parameters = $this->parameters();
+
+        if (isset($parameters['rectoken'])) {
+            $parameters['rectoken'] = '********';
+        }
+
+        return $parameters;
+    }
+
+    /**
      * @throws InvalidParameterException for an empty order id or description, or a negative amount
      */
     private static function checkOrder(string $orderId, int $amount, string $orderDesc): void

@@ -10,16 +10,20 @@ use ClassAtlas\Flitt\Flitt;
 use ClassAtlas\Flitt\Requests\RecurringRequest;
 use ClassAtlas\Flitt\Responses\Order;
 use SensitiveParameter;
+use SensitiveParameterValue;
 
 /**
  * A charge to a saved card, created with Flitt::recurring(). Every method sets the Flitt parameter of the same name and
  * returns a new builder, so keep the result. Finish with charge().
  *
- * There is no 3-D Secure and no payment page: the answer is final. The card's CVV is never sent.
+ * There is no 3-D Secure and no payment page: the answer is final. The card's CVV is never sent, and the card token
+ * stays out of dumps.
  */
 final class Recurring
 {
     use BuildsOrder;
+
+    private readonly SensitiveParameterValue $rectoken;
 
     /**
      * @internal Use Flitt::recurring().
@@ -33,13 +37,15 @@ final class Recurring
         private readonly Currency $currency,
         private readonly string $orderDesc,
         #[SensitiveParameter]
-        private readonly string $rectoken,
+        string $rectoken,
     ) {
         self::checkOrder($orderId, $amount, $orderDesc);
 
         if ($rectoken === '') {
             throw InvalidParameterException::invalid('rectoken', 'must not be empty');
         }
+
+        $this->rectoken = new SensitiveParameterValue($rectoken);
     }
 
     /**
@@ -73,8 +79,16 @@ final class Recurring
             'order_desc' => $this->orderDesc,
             'amount' => $this->amount,
             'currency' => $this->currency->value,
-            'rectoken' => $this->rectoken,
+            'rectoken' => $this->rectoken(),
             ...$this->options,
         ];
+    }
+
+    private function rectoken(): string
+    {
+        /** @var string $rectoken */
+        $rectoken = $this->rectoken->getValue();
+
+        return $rectoken;
     }
 }
