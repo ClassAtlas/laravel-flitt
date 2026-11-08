@@ -1,0 +1,96 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  # Weekly as well: no lock file is committed, so a new release of a dependency only reaches CI when it runs.
+  schedule:
+    - cron: '23 4 * * 3'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }} · Laravel 13 · ${{ matrix.dependencies }} · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ '8.4', '8.5' ]
+        dependencies: [ lowest, latest ]
+        include:
+          - os: windows-latest
+            php: '8.5'
+            dependencies: latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: fileinfo
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
+
+      - name: Installed versions
+        run: composer show --direct
+
+      - name: Tests
+        run: php vendor/bin/pest --ci
+
+  # The next PHP, ahead of its release. It never blocks a merge: it only shows what to fix before PHP 8.6 is supported.
+  canary:
+    name: PHP 8.6 canary · Laravel 13 · latest
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.6'
+          extensions: fileinfo
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress --ignore-platform-req=php+
+
+      - name: Installed versions
+        run: composer show --direct
+
+      - name: Tests
+        run: php vendor/bin/pest --ci
+
+  # The one check the main ruleset requires, so the matrix can change without touching the repository settings.
+  tests-passed:
+    name: tests-passed
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Every cell passed
+        run: test "${{ needs.test.result }}" = "success"
