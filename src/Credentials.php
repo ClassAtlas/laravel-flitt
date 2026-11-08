@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ClassAtlas\Flitt;
 
+use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
 use JsonSerializable;
 use LogicException;
 use SensitiveParameter;
@@ -23,6 +24,9 @@ final readonly class Credentials implements JsonSerializable
 
     private ?SensitiveParameterValue $creditKey;
 
+    /**
+     * @throws InvalidParameterException for a merchant id below 1 or an empty key
+     */
     public function __construct(
         public int $merchantId,
         #[SensitiveParameter]
@@ -30,6 +34,18 @@ final readonly class Credentials implements JsonSerializable
         #[SensitiveParameter]
         ?string $creditKey = null,
     ) {
+        if ($merchantId < 1) {
+            throw InvalidParameterException::invalid('merchantId', 'must be a positive number');
+        }
+
+        if ($paymentKey === '') {
+            throw InvalidParameterException::invalid('paymentKey', 'must not be empty');
+        }
+
+        if ($creditKey === '') {
+            throw InvalidParameterException::invalid('creditKey', 'must not be empty; leave it out when there is none');
+        }
+
         $this->paymentKey = new SensitiveParameterValue($paymentKey);
         $this->creditKey = $creditKey === null ? null : new SensitiveParameterValue($creditKey);
     }
