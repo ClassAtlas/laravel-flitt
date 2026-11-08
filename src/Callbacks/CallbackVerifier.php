@@ -10,7 +10,6 @@ use ClassAtlas\Flitt\Exceptions\InvalidSignatureException;
 use ClassAtlas\Flitt\Exceptions\MissingCredentialsException;
 use ClassAtlas\Flitt\Exceptions\UnknownMerchantException;
 use ClassAtlas\Flitt\Protocol\Body;
-use ClassAtlas\Flitt\Protocol\Envelope;
 use ClassAtlas\Flitt\Protocol\Value;
 use ClassAtlas\Flitt\Responses\Order;
 use ClassAtlas\Flitt\Signing\Verifier;
@@ -47,46 +46,17 @@ final readonly class CallbackVerifier
      * @internal The checked order, or null when the payload is not a readable order with a merchant id.
      *
      * @param  array<array-key, mixed>  $payload  a decoded JSON or form body
+     * @param  string  $source  what the body is, in error messages: "the callback" or "the browser return"
      *
      * @throws InvalidSignatureException
      * @throws UnknownMerchantException
      * @throws MissingCredentialsException
      */
-    public function check(array $payload): ?Order
+    public function check(array $payload, string $source = self::SOURCE): ?Order
     {
-        if (Envelope::is($payload)) {
-            $data = $payload['data'];
-            $order = Envelope::order($payload);
+        $fields = Verifier::order($payload, $this->credentialsFor(...), $source);
 
-            if (! is_string($data) || $order === null) {
-                return null;
-            }
-
-            $credentials = $this->credentialsFor($order);
-
-            if ($credentials === null) {
-                return null;
-            }
-
-            Verifier::envelope(Body::stringKeyed($payload), $data, $order, $credentials, self::SOURCE);
-
-            return Order::fromFields($order);
-        }
-
-        if ($payload === [] || array_is_list($payload)) {
-            return null;
-        }
-
-        $fields = Body::stringKeyed($payload);
-        $credentials = $this->credentialsFor($fields);
-
-        if ($credentials === null) {
-            return null;
-        }
-
-        Verifier::flat($fields, $credentials, self::SOURCE);
-
-        return Order::fromFields($fields);
+        return $fields === null ? null : Order::fromFields($fields);
     }
 
     /**

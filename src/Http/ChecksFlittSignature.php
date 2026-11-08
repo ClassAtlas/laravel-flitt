@@ -15,7 +15,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use LogicException;
-use Psr\Log\LoggerInterface;
 
 /**
  * @internal What CallbackRequest and BrowserReturnRequest share: the body is checked while Laravel resolves the request,
@@ -54,7 +53,7 @@ trait ChecksFlittSignature
         $payload = $this->flittPayload();
 
         try {
-            $order = $payload === null ? null : $this->container->make(CallbackVerifier::class)->check($payload);
+            $order = $payload === null ? null : $this->container->make(CallbackVerifier::class)->check($payload, 'the '.self::FLITT_SOURCE);
         } catch (InvalidSignatureException|UnknownMerchantException $exception) {
             $this->rejectFlittBody(403, $exception instanceof UnknownMerchantException ? 'unknown merchant' : 'signature', $payload);
         }
@@ -90,7 +89,9 @@ trait ChecksFlittSignature
             $payload = Envelope::order($payload);
         }
 
-        $this->container->make(LoggerInterface::class)->warning('Flitt '.self::FLITT_SOURCE.' rejected', [
+        $channel = $this->container->make('config')->get('flitt.log_channel');
+
+        $this->container->make('log')->channel(is_string($channel) && $channel !== '' ? $channel : null)->warning('Flitt '.self::FLITT_SOURCE.' rejected', [
             'reason' => $reason,
             'merchant_id' => Value::integer($payload['merchant_id'] ?? null),
             'order_id' => Value::string($payload['order_id'] ?? null),

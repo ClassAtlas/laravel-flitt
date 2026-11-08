@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
+use ClassAtlas\Flitt\Callbacks\CallbackVerifier;
 use ClassAtlas\Flitt\Contracts\CredentialsResolver;
 use ClassAtlas\Flitt\Credentials;
+use ClassAtlas\Flitt\Exceptions\InvalidSignatureException;
 use ClassAtlas\Flitt\Http\BrowserReturnRequest;
 use ClassAtlas\Flitt\Http\CallbackRequest;
 use ClassAtlas\Flitt\Protocol\Body;
 use ClassAtlas\Flitt\Signing\Signer;
 use ClassAtlas\Flitt\Tests\Support\Samples;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Monolog\Handler\TestHandler;
 
 beforeEach(function () {
     config(['flitt.merchant_id' => '1549901', 'flitt.payment_key' => 'test', 'flitt.credit_key' => 'testcredit']);
@@ -63,7 +65,10 @@ it('reads both returns open banking sends for one payment', function () {
 });
 
 it('answers 403 to a forged or unsigned body, and logs only the merchant and order ids', function (string $forgery) {
-    Log::spy();
+    config([
+        'flitt.log_channel' => 'flitt-test',
+        'logging.channels.flitt-test' => ['driver' => 'monolog', 'handler' => TestHandler::class],
+    ]);
     $sample = Samples::first(static fn (array $s): bool => $s['encoding'] === 'json' && $s['root'] === 'flat');
     $order = json_decode($sample['body'], true, flags: JSON_THROW_ON_ERROR);
 
@@ -76,8 +81,13 @@ it('answers 403 to a forged or unsigned body, and logs only the merchant and ord
 
     Samples::post($this, $sample, '/flitt/callback', json_encode($forged, JSON_THROW_ON_ERROR))->assertForbidden()->assertContent('');
 
-    Log::shouldHaveReceived('warning')->once()->withArgs(static fn (string $message, array $context): bool => $message === 'Flitt callback rejected'
-        && $context === ['reason' => 'signature', 'merchant_id' => 1549901, 'order_id' => $order['order_id']]);
+    /** @var TestHandler $handler */
+    $handler = app('log')->channel('flitt-test')->getLogger()->getHandlers()[0];
+
+    expect($handler->getRecords())->toHaveCount(1)
+        ->and($handler->getRecords()[0]->message)->toBe('Flitt callback rejected')
+        ->and($handler->getRecords()[0]->level->getName())->toBe('WARNING')
+        ->and($handler->getRecords()[0]->context)->toBe(['reason' => 'signature', 'merchant_id' => 1549901, 'order_id' => $order['order_id']]);
 })->with(['a changed amount', 'no signature', 'an uppercase signature', 'signed with another key']);
 
 it('answers 403 to a merchant the resolver does not know', function () {
@@ -120,4 +130,27 @@ it('answers 400 to a body it cannot read', function (string $contentType, string
 it('never answers 200 without a checked order', function () {
     $this->call('POST', '/flitt/return', server: ['CONTENT_TYPE' => 'application/x-www-form-urlencoded'], content: 'order_id=inv-1042&merchant_id=1549901')
         ->assertForbidden();
+});
+
+it('logs a rejection to the configured Flitt log channel', function () {
+    config([
+        'flitt.log_channel' => 'flitt-test',
+        'logging.channels.flitt-test' => ['driver' => 'monolog', 'handler' => TestHandler::class],
+    ]);
+
+    $this->call('POST', '/flitt/return', server: ['CONTENT_TYPE' => 'application/json'], content: '{"broken')->assertStatus(400);
+
+    /** @var TestHandler $handler */
+    $handler = app('log')->channel('flitt-test')->getLogger()->getHandlers()[0];
+
+    expect($handler->getRecords())->toHaveCount(1)
+        ->and($handler->getRecords()[0]->message)->toBe('Flitt browser return rejected');
+});
+
+it('names a browser return as such when its signature fails', function () {
+    $sample = Samples::first(static fn (array $s): bool => $s['channel'] === 'response_url' && $s['root'] === 'flat');
+    $fields = Body::parse($sample['body'], $sample['content_type']);
+
+    expect(fn () => app(CallbackVerifier::class)->check([...$fields, 'amount' => '1'], 'the browser return'))
+        ->toThrow(InvalidSignatureException::class, 'The browser return has a signature that does not match');
 });

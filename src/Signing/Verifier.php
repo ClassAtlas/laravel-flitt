@@ -7,6 +7,9 @@ namespace ClassAtlas\Flitt\Signing;
 use ClassAtlas\Flitt\Credentials;
 use ClassAtlas\Flitt\Exceptions\InvalidSignatureException;
 use ClassAtlas\Flitt\Exceptions\MissingCredentialsException;
+use ClassAtlas\Flitt\Protocol\Body;
+use ClassAtlas\Flitt\Protocol\Envelope;
+use Closure;
 use InvalidArgumentException;
 
 /**
@@ -20,6 +23,60 @@ final class Verifier
      * trusted.
      */
     private const array UNSIGNED_FIELDS = ['signature', 'response_signature_string'];
+
+    /**
+     * The order a decoded body carries, flat or inside a protocol 2.0 envelope, with its signature checked.
+     *
+     * @param  array<array-key, mixed>  $payload
+     * @param  Closure(array<string, mixed>): ?Credentials  $credentialsFor  the credentials for the order, or null when the
+     *                                                                       order names no merchant to check against
+     * @param  bool  $signatureRequired  false for answers Flitt does not sign; a signature that is present is checked anyway
+     * @return array<string, mixed>|null the order's fields, or null when the body is not a readable order
+     *
+     * @throws InvalidSignatureException
+     * @throws MissingCredentialsException
+     */
+    public static function order(array $payload, Closure $credentialsFor, string $source, bool $signatureRequired = true): ?array
+    {
+        if (Envelope::is($payload)) {
+            $data = $payload['data'];
+            $order = Envelope::order($payload);
+
+            if (! is_string($data) || $order === null) {
+                return null;
+            }
+
+            if ($signatureRequired || isset($payload['signature'])) {
+                $credentials = $credentialsFor($order);
+
+                if ($credentials === null) {
+                    return null;
+                }
+
+                self::envelope(Body::stringKeyed($payload), $data, $order, $credentials, $source);
+            }
+
+            return $order + Body::stringKeyed(array_intersect_key($payload, ['response_status' => true]));
+        }
+
+        if ($payload === [] || array_is_list($payload)) {
+            return null;
+        }
+
+        $fields = Body::stringKeyed($payload);
+
+        if ($signatureRequired || (isset($fields['signature']) && $fields['signature'] !== '')) {
+            $credentials = $credentialsFor($fields);
+
+            if ($credentials === null) {
+                return null;
+            }
+
+            self::flat($fields, $credentials, $source);
+        }
+
+        return $fields;
+    }
 
     /**
      * A protocol 1.0.1 body: every field but the signature itself is signed.
