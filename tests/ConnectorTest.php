@@ -36,6 +36,7 @@ it('sends to pay.flitt.com with the timeouts it was given', function () {
         ->and($pendingRequest->config()->all())->toMatchArray([
             RequestOptions::TIMEOUT => 25,
             RequestOptions::CONNECT_TIMEOUT => 5,
+            RequestOptions::ALLOW_REDIRECTS => false,
         ]);
 });
 

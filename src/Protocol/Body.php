@@ -13,7 +13,8 @@ use JsonException;
 final class Body
 {
     /**
-     * The decoded body, or null when it is neither JSON nor a form.
+     * The decoded body, or null when it is neither JSON nor a form. Flitt answers a text/plain request as a form; a
+     * body that says it is anything else, such as an HTML page, is never read as one.
      *
      * @return array<array-key, mixed>|null
      */
@@ -26,7 +27,10 @@ final class Body
             return self::json($raw);
         }
 
-        if (str_contains($contentType, 'x-www-form-urlencoded') || str_contains($raw, '=')) {
+        $declaredForm = str_contains($contentType, 'x-www-form-urlencoded') || str_contains($contentType, 'text/plain');
+        $undeclaredForm = $contentType === '' && preg_match('/^[A-Za-z0-9_.%+-]+=/', $raw) === 1;
+
+        if ($declaredForm || $undeclaredForm) {
             return self::form($raw);
         }
 

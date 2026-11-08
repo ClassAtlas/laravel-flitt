@@ -8,6 +8,7 @@ use ClassAtlas\Flitt\Exceptions\ConnectionFailedException;
 use ClassAtlas\Flitt\Logging\CallLog;
 use ClassAtlas\Flitt\Requests\FlittRequest;
 use ClassAtlas\Flitt\Signing\RequestBody;
+use GuzzleHttp\RequestOptions;
 use Psr\Log\LoggerInterface;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Http\Connector;
@@ -97,6 +98,16 @@ final class FlittConnector extends Connector
                 $exception,
             );
         }
+    }
+
+    /**
+     * Redirects are not followed: Flitt's API answers with 200, so a redirect is a failure to report, not a page to read.
+     *
+     * @return array<string, mixed>
+     */
+    protected function defaultConfig(): array
+    {
+        return [RequestOptions::ALLOW_REDIRECTS => false];
     }
 
     /**

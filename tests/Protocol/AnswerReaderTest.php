@@ -137,6 +137,7 @@ it('treats a body it cannot read as a failure to answer', function (mixed $body)
     new ProbeRequest()->fields(answer(MockResponse::make($body, 200, ['Content-Type' => 'text/html'])));
 })->with([
     'an HTML page' => ['<html>Maintenance</html>'],
+    'an HTML page with attributes' => ['<html lang="en"><body class="error">Maintenance</body></html>'],
     'broken JSON' => ['{"response": {'],
     'a response root that is not an object' => ['{"response": "ok"}'],
     'an empty object' => ['{"response": {}}'],
@@ -213,3 +214,13 @@ it('reads a list answer\'s error, and refuses anything else in its place', funct
             'response' => ['not a row'],
         ]))))->toThrow(ConnectionFailedException::class, 'could not be read');
 });
+
+it('reads an undeclared or text/plain form, as Flitt answers a text/plain request', function (string $contentType) use ($order) {
+    $fields = new ProbeRequest()->fields(answer(MockResponse::make(
+        http_build_query(signedWith('test', $order)),
+        200,
+        $contentType === '' ? [] : ['Content-Type' => $contentType],
+    )));
+
+    expect($fields)->toMatchArray(['order_id' => 'inv-1042']);
+})->with(['text/plain; charset=UTF-8', '']);
