@@ -30,6 +30,11 @@ final class Live
 
     public const string CREDIT_KEY = 'testcredit';
 
+    /**
+     * The card token the test merchant returns for its test cards.
+     */
+    public const string TEST_RECTOKEN = 'I0wh7fBmFIdcY6K3Px2QugVrVR65sPafeZkPmRanOiRnXG';
+
     public const string FIXTURES = __DIR__.'/../Fixtures/Saloon';
 
     /**

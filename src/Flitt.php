@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ClassAtlas\Flitt;
 
 use ClassAtlas\Flitt\Builders\Checkout;
+use ClassAtlas\Flitt\Builders\Recurring;
 use ClassAtlas\Flitt\Enums\Currency;
 use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
 use ClassAtlas\Flitt\Exceptions\MissingCredentialsException;
@@ -15,6 +16,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
 use Psr\Log\LoggerInterface;
 use Saloon\Http\Response;
+use SensitiveParameter;
 
 /**
  * The client: every Flitt operation starts here, usually through the Flitt facade.
@@ -38,6 +40,23 @@ final readonly class Flitt
     public function checkout(string $orderId, int $amount, Currency $currency, string $orderDesc): Checkout
     {
         return new Checkout($this, $orderId, $amount, $currency, $orderDesc);
+    }
+
+    /**
+     * A charge to a card saved earlier with requiredRectoken(): finish it with charge().
+     *
+     * @param  int  $amount  in minor units: 12_500 is 125.00
+     * @param  string  $rectoken  the card token from the first order's callback ($order->rectoken)
+     */
+    public function recurring(
+        string $orderId,
+        int $amount,
+        Currency $currency,
+        string $orderDesc,
+        #[SensitiveParameter]
+        string $rectoken,
+    ): Recurring {
+        return new Recurring($this, $orderId, $amount, $currency, $orderDesc, $rectoken);
     }
 
     /**

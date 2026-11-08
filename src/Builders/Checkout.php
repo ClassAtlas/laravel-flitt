@@ -12,7 +12,6 @@ use ClassAtlas\Flitt\Exceptions\InvalidParameterException;
 use ClassAtlas\Flitt\Flitt;
 use ClassAtlas\Flitt\Requests\CheckoutTokenRequest;
 use ClassAtlas\Flitt\Requests\CheckoutUrlRequest;
-use ClassAtlas\Flitt\ReservationData;
 use ClassAtlas\Flitt\Responses\CheckoutToken;
 use ClassAtlas\Flitt\Responses\CheckoutUrl;
 
@@ -22,10 +21,7 @@ use ClassAtlas\Flitt\Responses\CheckoutUrl;
  */
 final class Checkout
 {
-    /**
-     * @var array<string, string|int|bool|null>
-     */
-    private array $options = [];
+    use BuildsOrder;
 
     /**
      * @internal Use Flitt::checkout().
@@ -39,25 +35,7 @@ final class Checkout
         private readonly Currency $currency,
         private readonly string $orderDesc,
     ) {
-        if ($orderId === '') {
-            throw InvalidParameterException::invalid('orderId', 'must not be empty');
-        }
-
-        if ($orderDesc === '') {
-            throw InvalidParameterException::invalid('orderDesc', 'must not be empty');
-        }
-
-        if ($amount < 0) {
-            throw InvalidParameterException::invalid('amount', 'must not be negative');
-        }
-    }
-
-    /**
-     * Where Flitt posts the callback for each event on the order.
-     */
-    public function serverCallbackUrl(string $url): self
-    {
-        return $this->with('server_callback_url', $url);
+        self::checkOrder($orderId, $amount, $orderDesc);
     }
 
     /**
@@ -74,34 +52,6 @@ final class Checkout
     public function cancelUrl(string $url): self
     {
         return $this->with('cancel_url', $url);
-    }
-
-    /**
-     * Seconds until the order expires; Flitt's default is 36000 (10 hours).
-     */
-    public function lifetime(int $seconds): self
-    {
-        if ($seconds < 1) {
-            throw InvalidParameterException::invalid('lifetime', 'must be at least 1 second');
-        }
-
-        return $this->with('lifetime', $seconds);
-    }
-
-    /**
-     * Echoed back in every answer and callback.
-     */
-    public function merchantData(string $merchantData): self
-    {
-        return $this->with('merchant_data', $merchantData);
-    }
-
-    /**
-     * Hold the money, to capture it later.
-     */
-    public function preauth(bool $preauth = true): self
-    {
-        return $this->with('preauth', $preauth);
     }
 
     /**
@@ -128,11 +78,6 @@ final class Checkout
         return $this->with('verification', $verification);
     }
 
-    public function senderEmail(string $email): self
-    {
-        return $this->with('sender_email', $email);
-    }
-
     /**
      * The payment page's language.
      */
@@ -141,25 +86,12 @@ final class Checkout
         return $this->with('lang', $lang->value);
     }
 
-    public function productId(string $productId): self
-    {
-        return $this->with('product_id', $productId);
-    }
-
     /**
      * A checkout design from Flitt's merchant portal.
      */
     public function designId(string $designId): self
     {
         return $this->with('design_id', $designId);
-    }
-
-    /**
-     * Payer details Flitt passes to the bank.
-     */
-    public function reservationData(ReservationData $reservationData): self
-    {
-        return $this->with('reservation_data', $reservationData->toParameter());
     }
 
     /**
@@ -219,13 +151,5 @@ final class Checkout
             'currency' => $this->currency->value,
             ...$this->options,
         ];
-    }
-
-    private function with(string $parameter, string|int|bool $value): self
-    {
-        $checkout = clone $this;
-        $checkout->options[$parameter] = $value;
-
-        return $checkout;
     }
 }
